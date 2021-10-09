@@ -1,0 +1,1 @@
+web: gunicorn gwachaepah_practice.wsgi --log-file -
