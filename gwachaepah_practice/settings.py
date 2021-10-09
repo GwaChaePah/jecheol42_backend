@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import django_heroku
-import decouple
+# import decouple
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,8 +22,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = decouple.config('SECRET_KEY')
-# SECRET_KEY = 'django-insecure-q7!h=ss!c9tc%815)s6%++==46=4oxh)_!chb81g5qiml1b@3g'
+# SECRET_KEY = decouple.config('SECRET_KEY')
+SECRET_KEY = 'django-insecure-q7!h=ss!c9tc%815)s6%++==46=4oxh)_!chb81g5qiml1b@3g'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -82,11 +82,11 @@ WSGI_APPLICATION = 'gwachaepah_practice.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': decouple.config('POSTGRES_NAME'),
-        'USER': decouple.config('POSTGRES_USER'),
-        'PASSWORD': decouple.config('POSTGRES_PASSWORD'),
-        'HOST': decouple.config('POSTGRES_HOST'),
-        'PORT': decouple.config('POSTGRES_PORT'),
+        'NAME': 'gwachaepah_practice',
+        'USER': 'root',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
