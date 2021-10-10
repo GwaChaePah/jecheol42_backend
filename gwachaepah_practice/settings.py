@@ -12,11 +12,11 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import django_heroku
+import dj_database_url
 # import decouple
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -28,8 +28,7 @@ SECRET_KEY = 'django-insecure-q7!h=ss!c9tc%815)s6%++==46=4oxh)_!chb81g5qiml1b@3g
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['0.0.0.0:5000', '.herokuapp.com']
-
+ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com']
 
 # Application definition
 
@@ -75,25 +74,23 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'gwachaepah_practice.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        # 'NAME': 'gwachaepah_practice',
-        'NAME': 'd2e9380q2gij4t',
-        # 'USER': 'root',
-        'USER': 'qvhpclmqzpdqlm',
-        # 'PASSWORD': 'password',
-        'PASSWORD': 'fc1b4bab6982e9270816f991b2c9037c3795f8238a48a18a6aba4cbc9ee20e18',
-        # 'HOST': ALLOWED_HOSTS,
-        'HOST': 'ec2-44-199-86-61.compute-1.amazonaws.com',
+        'NAME': 'gwachaepah_practice',
+        # 'NAME': 'd2e9380q2gij4t',
+        'USER': 'root',
+        # 'USER': 'qvhpclmqzpdqlm',
+        'PASSWORD': 'password',
+        # 'PASSWORD': 'fc1b4bab6982e9270816f991b2c9037c3795f8238a48a18a6aba4cbc9ee20e18',
+        'HOST': 'herokuapp.com',
+        # 'HOST': 'ec2-44-199-86-61.compute-1.amazonaws.com',
         'PORT': '5432',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -113,7 +110,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -126,7 +122,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = False
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
@@ -145,4 +140,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Activate Django-Heroku
 django_heroku.settings(locals())
 
-SITE_ID = 1
+# SITE_ID = 1
+
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
