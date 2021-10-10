@@ -6,4 +6,16 @@
 	<h2>|제철42|에 오신 것을 환영합니다 :)</h2>
 	<a class="btn btn-primary" href="{% url 'board' %}" role="button">소분/나눔 게시판으로 이동하기</a>
 </div>
+<div class="board-list">
+{% for post in posts %}
+<div class="card" style="width: 18rem;">
+    <img src="{{ post.image1.url }}" class="card-img-top" alt="...">
+    <div class="card-body">
+        <h5 class="card-title">{{ post.title }}</h5>
+        <p class="card-text">{{ post.content }}</p>
+        <a href="{% url '#' post.id %}" class="btn btn-primary">상세보기</a>
+    </div>
+</div>
+{% endfor %}
+</div>
 {% endblock %}
