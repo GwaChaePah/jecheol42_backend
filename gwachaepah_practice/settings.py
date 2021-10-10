@@ -88,8 +88,8 @@ DATABASES = {
         # 'USER': 'qvhpclmqzpdqlm',
         'PASSWORD': 'password',
         # 'PASSWORD': 'fc1b4bab6982e9270816f991b2c9037c3795f8238a48a18a6aba4cbc9ee20e18',
-        'HOST': ALLOWED_HOSTS,
-        # 'HOST': 'ec2-44-199-86-61.compute-1.amazonaws.com',
+        # 'HOST': ALLOWED_HOSTS,
+        'HOST': 'ec2-44-199-86-61.compute-1.amazonaws.com',
         'PORT': '5432',
     }
 }
