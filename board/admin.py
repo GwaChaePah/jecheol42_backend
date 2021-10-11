@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post
+from .models import Post, Product
 
 
 @admin.register(Post)
@@ -19,4 +19,25 @@ class PostAdmin(admin.ModelAdmin):
     search_fields = (
         'title',
         'content',
+    )
+
+
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'name',
+        'image',
+        'jan',
+        'feb',
+        'mar',
+        'apr',
+        'may',
+        'jun',
+        'jul',
+        'aug',
+        'sep',
+        'oct',
+        'nov',
+        'dec',
     )
