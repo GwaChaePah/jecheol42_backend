@@ -9,6 +9,8 @@ class PostAdmin(admin.ModelAdmin):
         'title',
         'content',
         'image1',
+        'image2',
+        'image3',
         'view_count',
         'tag',
         'created_at',
