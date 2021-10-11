@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 import django_heroku
 import dj_database_url
+import secret
 # import decouple
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -78,20 +79,7 @@ WSGI_APPLICATION = 'gwachaepah_practice.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        # 'NAME': 'gwachaepah_practice',
-        'NAME': 'd2e9380q2gij4t',
-        # 'USER': 'root',
-        'USER': 'qvhpclmqzpdqlm',
-        # 'PASSWORD': 'password',
-        'PASSWORD': 'fc1b4bab6982e9270816f991b2c9037c3795f8238a48a18a6aba4cbc9ee20e18',
-        # 'HOST': 'herokuapp.com',
-        'HOST': 'ec2-44-199-86-61.compute-1.amazonaws.com',
-        'PORT': '5432',
-    }
-}
+DATABASES = secret.DATABASES
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
