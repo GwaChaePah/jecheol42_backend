@@ -36,3 +36,10 @@ class Product(models.Model):
     oct = models.BooleanField(default=False)
     nov = models.BooleanField(default=False)
     dec = models.BooleanField(default=False)
+
+class Comment(models.Model):
+    post_key = models.PositiveIntegerField(null=False)
+    content = models.TextField(max_length=400, null=False)
+    user_key = models.PositiveIntegerField(null=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

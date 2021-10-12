@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post, Product
+from .models import Post, Product, Comment
 
 
 @admin.register(Post)
@@ -41,3 +41,20 @@ class ProductAdmin(admin.ModelAdmin):
         'nov',
         'dec',
     )
+
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'post_key',
+        'content',
+        'user_key',
+        'created_at',
+        'updated_at',
+    )
+    search_fields = (
+        'post_key',
+        'user_key',
+    )
+
