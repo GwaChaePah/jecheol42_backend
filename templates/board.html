@@ -8,6 +8,7 @@
 </div>
 <div class="board-list">
 {% for post in posts %}
+    <h1>post id : {{ post.id }}</h1>
 <div class="card" style="width: 18rem;">
     <img src="{{ post.image1.url }}" class="card-img-top" alt="...">
     {% if post.image2 != "" %}
@@ -20,6 +21,14 @@
         <h5 class="card-title">{{ post.title }}</h5>
         <p class="card-text">{{ post.content }}</p>
 {#        <a href="{% url '#' post.id %}" class="btn btn-primary">상세보기</a>#}
+        <div class="card-text">
+            <h3>post {{ post.id }} 의 댓글입니다.</h3>
+            {% for comment in comments %}
+                {% if comment.post_key == post.id %}
+                    <p>user {{ comment.user_key }} : {{ comment.content }}</p>
+                {% endif %}
+            {% endfor %}
+        </div>
     </div>
 </div>
 {% endfor %}

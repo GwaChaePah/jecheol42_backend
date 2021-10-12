@@ -12,7 +12,7 @@ def main(request):
 def board(request):
     context = {
         'posts': Post.objects.all().order_by('-created_at'),
-        'comments': Comment.objects.all().order_by('-created_at'),
+        'comments': Comment.objects.all().order_by('created_at'),
     }
     return render(request, 'board.html', context)
 
