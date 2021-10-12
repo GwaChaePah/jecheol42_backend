@@ -1,5 +1,5 @@
 *.cnf
 *.ini
-.idea
-.idea/*
-.secret.py
+.idea/
+secret.py
+.DS_Store
