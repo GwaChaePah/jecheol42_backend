@@ -37,6 +37,7 @@ class Product(models.Model):
     nov = models.BooleanField(default=False)
     dec = models.BooleanField(default=False)
 
+
 class Comment(models.Model):
     post_key = models.PositiveIntegerField(null=False)
     content = models.TextField(max_length=400, null=False)
