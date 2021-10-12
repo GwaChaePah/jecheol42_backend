@@ -10,6 +10,12 @@
 {% for post in posts %}
 <div class="card" style="width: 18rem;">
     <img src="{{ post.image1.url }}" class="card-img-top" alt="...">
+    {% if post.image2 != "" %}
+        <img src="{{ post.image2.url }}" class="card-img-top" alt="...">
+    {% endif %}
+    {% if post.image3 != "" %}
+        <img src="{{ post.image3.url }}" class="card-img-top" alt="...">
+    {% endif %}
     <div class="card-body">
         <h5 class="card-title">{{ post.title }}</h5>
         <p class="card-text">{{ post.content }}</p>
