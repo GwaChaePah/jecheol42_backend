@@ -3,3 +3,4 @@
 .idea/
 secret.py
 .DS_Store
+*.pyc
