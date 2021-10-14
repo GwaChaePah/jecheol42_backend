@@ -1,14 +1,13 @@
 from django.shortcuts import render
 from datetime import datetime
-from .models import Post, Product, Comment, ProductMonth
+from .models import Post, Comment, ProductMonth
 
 
 def main(request):
     month = datetime.now().month
-    if month == 10:
-        context = {
-            'product': Product.objects.filter(oct=1)
-        }
+    context = {
+        'products': ProductMonth.objects.filter(month__contains=[month])
+    }
     return render(request, 'main.html', context)
 
 

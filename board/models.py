@@ -22,27 +22,10 @@ class Post(models.Model):
     user_key = models.PositiveIntegerField()
 
 
-class Product(models.Model):
-    name = models.CharField(max_length=30)
-    image = models.ImageField(upload_to="product/img")
-    jan = models.BooleanField(default=False)
-    feb = models.BooleanField(default=False)
-    mar = models.BooleanField(default=False)
-    apr = models.BooleanField(default=False)
-    may = models.BooleanField(default=False)
-    jun = models.BooleanField(default=False)
-    jul = models.BooleanField(default=False)
-    aug = models.BooleanField(default=False)
-    sep = models.BooleanField(default=False)
-    oct = models.BooleanField(default=False)
-    nov = models.BooleanField(default=False)
-    dec = models.BooleanField(default=False)
-
-
 class ProductMonth(models.Model):
     name = models.CharField(max_length=30)
     image = models.ImageField(upload_to="product/img")
-    month = ArrayField(models.PositiveSmallIntegerField(null=True), blank=True, size=12)
+    month = ArrayField(models.IntegerField(null=True), blank=True, size=12)
 
 
 class Comment(models.Model):
