@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 
 
 class Post(models.Model):
@@ -36,6 +37,12 @@ class Product(models.Model):
     oct = models.BooleanField(default=False)
     nov = models.BooleanField(default=False)
     dec = models.BooleanField(default=False)
+
+
+class ProductMonth(models.Model):
+    name = models.CharField(max_length=30)
+    image = models.ImageField(upload_to="product/img")
+    month = ArrayField(models.PositiveSmallIntegerField(null=True), blank=True, size=12)
 
 
 class Comment(models.Model):
