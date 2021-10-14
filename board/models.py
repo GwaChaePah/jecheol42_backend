@@ -11,9 +11,9 @@ class Post(models.Model):
 
     title = models.CharField(max_length=100)
     content = models.TextField()
-    image1 = models.ImageField(upload_to="posts/img")
-    image2 = models.ImageField(upload_to="posts/img", blank=True, null=True)
-    image3 = models.ImageField(upload_to="posts/img", blank=True, null=True)
+    image1 = models.ImageField(upload_to="posts/img/")
+    image2 = models.ImageField(upload_to="posts/img/", blank=True, null=True)
+    image3 = models.ImageField(upload_to="posts/img/", blank=True, null=True)
     view_count = models.PositiveIntegerField(default=0, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
