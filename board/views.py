@@ -1,12 +1,12 @@
 from django.shortcuts import render
 from datetime import datetime
-from .models import Post, Comment, ProductMonth
+from .models import Post, Comment, Product
 
 
 def main(request):
     month = datetime.now().month
     context = {
-        'products': ProductMonth.objects.filter(month__contains=[month])
+        'products': Product.objects.filter(month__contains=[month])
     }
     return render(request, 'main.html', context)
 

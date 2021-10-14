@@ -22,7 +22,7 @@ class Post(models.Model):
     user_key = models.PositiveIntegerField()
 
 
-class ProductMonth(models.Model):
+class Product(models.Model):
     name = models.CharField(max_length=30)
     image = models.ImageField(upload_to="product/img")
     month = ArrayField(models.IntegerField(null=True), blank=True, size=12)

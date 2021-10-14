@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post, Comment, ProductMonth
+from .models import Post, Comment, Product
 
 
 @admin.register(Post)
@@ -22,8 +22,8 @@ class PostAdmin(admin.ModelAdmin):
     )
 
 
-@admin.register(ProductMonth)
-class ProductMonthAdmin(admin.ModelAdmin):
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
