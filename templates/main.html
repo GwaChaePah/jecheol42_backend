@@ -7,32 +7,15 @@
 	<a class="btn btn-primary" href="{% url 'board' %}" role="button">소분/나눔 게시판으로 이동하기</a>
     <div class="product-list">
         <H3>이번달 제철은...</H3>
-    {% for product in products %}
-    <div class="card" style="width: 18rem;">
-        <img src="{{ product.image.url }}" class="card-img-top" alt="..." width="500px" height="300px">
-        <div class="card-body">
-            <h5 class="card-name">{{ product.name }}</h5>
+        {% for product in products %}
+        <div class="card" style="width: 18rem;">
+            <img src="{{ product.image.url }}" class="card-img-top" alt="..." width="500px" height="300px">
+            <div class="card-body">
+                <h5 class="card-name">{{ product.name }}</h5>
+            </div>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
 
-{#<div class="board-list">#}
-{#{% for post in posts %}#}
-{#<div class="card" style="width: 18rem;">#}
-{#    <img src="{{ post.image1.url }}" class="card-img-top" alt="...">#}
-{#    {% if post.image2 != "" %}#}
-{#        <img src="{{ post.image2.url }}" class="card-img-top" alt="...">#}
-{#    {% endif %}#}
-{#    {% if post.image3 != "" %}#}
-{#        <img src="{{ post.image3.url }}" class="card-img-top" alt="...">#}
-{#    {% endif %}#}
-{#    <div class="card-body">#}
-{#        <h5 class="card-title">{{ post.title }}</h5>#}
-{#        <p class="card-text">{{ post.content }}</p>#}
-{#        <a href="{% url '#' post.id %}" class="btn btn-primary">상세보기</a>#}
-{#    </div>#}
-{#</div>#}
-{#{% endfor %}#}
-{#</div>#}
 {% endblock %}

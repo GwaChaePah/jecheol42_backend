@@ -1,3 +1,5 @@
+import random
+
 from django.shortcuts import render
 from datetime import datetime
 from .models import Post, Comment, Product
@@ -6,7 +8,7 @@ from .models import Post, Comment, Product
 def main(request):
     month = datetime.now().month
     context = {
-        'products': Product.objects.filter(month__contains=[month])
+        'products': Product.objects.filter(month__contains=[month]).order_by("?")[:2],
     }
     return render(request, 'main.html', context)
 
