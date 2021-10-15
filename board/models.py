@@ -1,5 +1,11 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
+from django.utils import timezone
+
+
+class AutoDateTimeField(models.DateTimeField):
+    def pre_save(self, model_instance, add):
+        return timezone.now()
 
 
 class Post(models.Model):
@@ -14,11 +20,11 @@ class Post(models.Model):
     image1 = models.ImageField(upload_to="posts/img/")
     image2 = models.ImageField(upload_to="posts/img/", blank=True, null=True)
     image3 = models.ImageField(upload_to="posts/img/", blank=True, null=True)
-    view_count = models.PositiveIntegerField(default=0, blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
+    view_count = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = AutoDateTimeField(default=timezone.now)
     tag = models.PositiveSmallIntegerField(choices=TAGS)
-    price = models.PositiveIntegerField(default=0, blank=True, null=True)
+    price = models.PositiveIntegerField(default=0)
     user_key = models.PositiveIntegerField()
 
 
