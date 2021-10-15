@@ -13,6 +13,7 @@ class PostAdmin(admin.ModelAdmin):
         'image3',
         'view_count',
         'tag',
+        'price',
         'created_at',
         'updated_at',
     )
