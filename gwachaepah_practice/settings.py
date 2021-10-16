@@ -143,9 +143,9 @@ DATABASES['default'].update(db_from_env)
 
 # cloudinary setting
 cloudinary.config(
-  cloud_name = "***REMOVED***",
-  api_key = "***REMOVED***",
-  api_secret = "***REMOVED***"
+  CLOUD_NAME = "***REMOVED***",
+  API_KEY = "***REMOVED***",
+  API_SECRET = "***REMOVED***"
 )
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
