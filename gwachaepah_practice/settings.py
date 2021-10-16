@@ -143,9 +143,9 @@ DATABASES['default'].update(db_from_env)
 
 # cloudinary setting
 cloudinary.config(
-  cloud_name = "dpthsftz1",
-  api_key = "985276782615182",
-  api_secret = "tTCgA6S3gXHy9AF4lwjsMCnL0NQ"
+  CLOUD_NAME = "dpthsftz1",
+  API_KEY = "985276782615182",
+  API_SECRET = "tTCgA6S3gXHy9AF4lwjsMCnL0NQ"
 )
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
