@@ -142,11 +142,12 @@ db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
 
 # cloudinary setting
-cloudinary.config(
-  CLOUD_NAME = "dpthsftz1",
-  API_KEY = "985276782615182",
-  API_SECRET = "tTCgA6S3gXHy9AF4lwjsMCnL0NQ"
-)
+CLOUDINARY_STORAGE = {
+  'CLOUD_NAME': 'dpthsftz1',
+  'API_KEY': '985276782615182',
+  'API_SECRET': 'tTCgA6S3gXHy9AF4lwjsMCnL0NQ',
+}
+
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
