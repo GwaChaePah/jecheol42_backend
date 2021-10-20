@@ -143,9 +143,9 @@ DATABASES['default'].update(db_from_env)
 
 # cloudinary setting
 CLOUDINARY_STORAGE = {
-  'CLOUD_NAME': 'dpthsftz1',
-  'API_KEY': '985276782615182',
-  'API_SECRET': 'tTCgA6S3gXHy9AF4lwjsMCnL0NQ',
+  'CLOUD_NAME': os.environ['CLOUD_NAME'],
+  'API_KEY': os.environ['CLOUD_API_KEY'],
+  'API_SECRET': os.environ['CLOUD_API_SECRET'],
 }
 
 
