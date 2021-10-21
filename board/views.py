@@ -23,8 +23,12 @@ def board(request):
 
 
 def search(request):
-    put_data_to_api_table()
+    i = 1
+    date = datetime.now().date()
+    while i < 5:
+        put_data_to_api_table(date, i * 100)
+        i += 1
     context = {
-        'open_api_data': OpenApi.objects.all(),
+        'open_api_data': OpenApi.objects.all().order_by('id'),
     }
     return render(request, 'search.html', context)
