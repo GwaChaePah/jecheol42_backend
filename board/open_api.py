@@ -26,6 +26,7 @@ def put_data_to_api_table(date, category):
         items = json_res['data']['item']
     except:
         print("error\n")
+        return
     for item in items:
         OpenApi.objects.create(
             item_name=item['item_name'],
