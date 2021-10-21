@@ -3,6 +3,7 @@
 {% block content %}
     {% for item in open_api_data %}
         <div style="border: 1px; border-style: dotted; border-color: #1b1b1b; margin: 10px; padding: 10px;">
+            <h5>{{ item.id }}</h5>
             <h5>{{ item.item_name }}</h5>
             <h5>{{ item.kind_name }}</h5>
             <h5>{{ item.rank }}</h5>
