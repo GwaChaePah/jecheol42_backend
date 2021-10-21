@@ -1,6 +1,7 @@
 import os
 import requests
 from datetime import datetime
+from .models import OpenApi
 
 
 def call_open_api():
@@ -16,3 +17,21 @@ def call_open_api():
     }
     api_res = requests.get(url, params=query_params)
     return api_res.json()
+
+
+def put_data_to_api_table():
+    json_res = call_open_api()
+    try:
+        items = json_res['data']['item']
+    except:
+        print("error\n")
+    for item in items:
+        OpenApi.objects.create(
+            item_name=item['item_name'],
+            kind_name=item['kind_name'],
+            rank=item['rank'],
+            unit=item['unit'],
+            date=datetime.now().date(),
+            price=item['dpr1'],
+            average_price=item['dpr7'],
+        )
