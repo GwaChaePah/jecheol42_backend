@@ -2,8 +2,8 @@ import random
 
 from django.shortcuts import render
 from datetime import datetime
-from .models import Post, Comment, Product
-from .open_api import call_open_api
+from .models import Post, Comment, Product, OpenApi
+from .open_api import put_data_to_api_table
 
 
 def main(request):
@@ -23,8 +23,8 @@ def board(request):
 
 
 def search(request):
-    json_res = call_open_api()
+    put_data_to_api_table()
     context = {
-        'json': json_res
+        'open_api_data': OpenApi.objects.all(),
     }
     return render(request, 'search.html', context)
