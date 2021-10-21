@@ -3,6 +3,7 @@ import random
 from django.shortcuts import render
 from datetime import datetime
 from .models import Post, Comment, Product
+from .open_api import call_open_api
 
 
 def main(request):
@@ -20,3 +21,10 @@ def board(request):
     }
     return render(request, 'board.html', context)
 
+
+def search(request):
+    json_res = call_open_api()
+    context = {
+        'json': json_res
+    }
+    return render(request, 'search.html', context)
