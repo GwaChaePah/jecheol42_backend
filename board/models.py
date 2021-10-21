@@ -40,3 +40,13 @@ class Comment(models.Model):
     user_key = models.PositiveIntegerField(null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+
+class OpenApi(models.Model):
+    item_name = models.CharField(max_length=32)
+    kind_name = models.CharField(max_length=32)
+    rank = models.CharField(max_length=8)
+    unit = models.CharField(max_length=8)
+    date = models.CharField(max_length=16)
+    price = models.CharField(max_length=8)
+    average_price = models.CharField(max_length=8)

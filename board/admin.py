@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post, Comment, Product
+from .models import Post, Comment, Product, OpenApi
 
 
 @admin.register(Post)
@@ -48,3 +48,21 @@ class CommentAdmin(admin.ModelAdmin):
         'user_key',
     )
 
+
+@admin.register(OpenApi)
+class OpenApiAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'item_name',
+        'kind_name',
+        'rank',
+        'unit',
+        'date',
+        'price',
+        'average_price',
+    )
+    search_fields = (
+        'item_name',
+        'kind_name',
+        'date',
+    )
