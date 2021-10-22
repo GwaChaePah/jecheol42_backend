@@ -5,3 +5,6 @@ secret.py
 .DS_Store
 *.pyc
 Runfile
+board/__pycache__/
+board/migrations/__pycache__/
+gwachaepah_practice/__pycache__/
