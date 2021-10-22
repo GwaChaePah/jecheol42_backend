@@ -24,12 +24,6 @@ def board(request):
 
 
 def search(request):
-    i = 1
-    date = datetime.now().date()
-    if OpenApi.objects.filter(date=date).first() is None:
-        while i < 5:
-            put_data_to_api_table(date, i * 100)
-            i += 1
     context = {
         # 'open_api_data': OpenApi.objects.all().order_by('id'),
         'open_api_data': OpenApi.objects.filter(Q(item_name__contains='버섯') | Q(kind_name__contains='버섯')).filter(rank='중품', date=date).order_by('id'),
