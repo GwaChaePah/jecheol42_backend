@@ -24,8 +24,10 @@ def board(request):
 
 
 def search(request):
+    date = datetime.now().date()
+    searchtext = '버섯'
     context = {
         # 'open_api_data': OpenApi.objects.all().order_by('id'),
-        'open_api_data': OpenApi.objects.filter(Q(item_name__contains='버섯') | Q(kind_name__contains='버섯')).filter(rank='중품', date=date).order_by('id'),
+        'open_api_data': OpenApi.objects.filter(Q(item_name__contains=searchtext) | Q(kind_name__contains=searchtext)).filter(rank='중품', date=date).order_by('id'),
     }
     return render(request, 'search.html', context)
