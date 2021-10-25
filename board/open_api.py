@@ -27,8 +27,8 @@ def put_data_to_api_table(date, category):
     except:
         print("error\n")
         return
-    for item in items:
-        OpenApi.objects.create(
+    open_api_list = [
+        OpenApi(
             item_name=item['item_name'],
             kind_name=item['kind_name'],
             rank=item['rank'],
@@ -37,3 +37,6 @@ def put_data_to_api_table(date, category):
             price=item['dpr1'],
             average_price=item['dpr7'],
         )
+        for item in items
+    ]
+    OpenApi.objects.bulk_create(open_api_list)
