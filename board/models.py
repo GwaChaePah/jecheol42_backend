@@ -50,3 +50,4 @@ class OpenApi(models.Model):
     date = models.CharField(max_length=16)
     price = models.CharField(max_length=8)
     average_price = models.CharField(max_length=8)
+    created_at = models.DateTimeField(default=timezone.now)
