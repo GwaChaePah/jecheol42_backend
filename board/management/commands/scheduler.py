@@ -8,7 +8,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         i = 1
         date = datetime.now().date()
-        if OpenApi.objects.filter(date=date).first() is None:
-            while i < 5:
-                put_data_to_api_table(date, i * 100)
-                i += 1
+        while i < 5:
+            put_data_to_api_table(date, i * 100)
+            i += 1
