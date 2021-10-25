@@ -60,6 +60,7 @@ class OpenApiAdmin(admin.ModelAdmin):
         'date',
         'price',
         'average_price',
+        'created_at',
     )
     search_fields = (
         'item_name',
