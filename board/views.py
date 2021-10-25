@@ -10,7 +10,7 @@ from django.db.models import Q
 def main(request):
     month = datetime.now().month
     context = {
-        'products': Product.objects.filter(month__contains=[month]).order_by("?")[:2],
+        'products': Product.objects.filter(month__contains=[month]).order_by("?")[:4],
     }
     return render(request, 'main.html', context)
 
