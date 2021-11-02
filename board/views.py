@@ -35,5 +35,6 @@ def search(request):
 
 
 class ProductList(generics.ListAPIView):
-    queryset = Product.objects.all()
+    month = datetime.now().month
+    queryset = Product.objects.filter(month__contains=[month]).order_by("?")[:4]
     serializer_class = ProductSerializer
