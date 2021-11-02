@@ -15,13 +15,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from board.views import main, board, search
-from django.conf import settings
-from django.conf.urls.static import static
+from board.views import main, board, search, ProductList
+from rest_framework.urlpatterns import format_suffix_patterns
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', main, name="main"),
     path('board/', board, name="board"),
     path('search/', search, name="search"),
+    path('product-api/', ProductList.as_view()),
 ]
+
+
+urlpatterns = format_suffix_patterns(urlpatterns)
