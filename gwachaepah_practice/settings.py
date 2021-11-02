@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'board',
     'cloudinary',
     'cloudinary_storage',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -133,8 +134,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Activate Django-Heroku
 django_heroku.settings(locals())
 
-# SITE_ID = 1
-
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
 
@@ -145,6 +144,9 @@ CLOUDINARY_STORAGE = {
   'API_SECRET': os.environ['CLOUD_API_SECRET'],
 }
 
-
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
