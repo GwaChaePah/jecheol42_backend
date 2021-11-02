@@ -3,8 +3,9 @@ import random
 from django.shortcuts import render
 from datetime import datetime
 from .models import Post, Comment, Product, OpenApi
-from .open_api import put_data_to_api_table
 from django.db.models import Q
+from .serializers import ProductSerializer
+from rest_framework import generics
 
 
 def main(request):
@@ -31,3 +32,8 @@ def search(request):
         'open_api_data': OpenApi.objects.filter(Q(item_name__contains=searchtext) | Q(kind_name__contains=searchtext)).filter(rank='중품', date=date).order_by('id'),
     }
     return render(request, 'search.html', context)
+
+
+class ProductList(generics.ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
