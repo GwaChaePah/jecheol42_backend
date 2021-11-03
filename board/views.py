@@ -4,7 +4,7 @@ from django.shortcuts import render
 from datetime import datetime
 from .models import Post, Comment, Product, OpenApi
 from django.db.models import Q
-from .serializers import ProductSerializer
+from .serializers import ProductSerializer, PostSerializer
 from rest_framework import generics
 
 
@@ -38,3 +38,8 @@ class ProductList(generics.ListAPIView):
     month = datetime.now().month
     queryset = Product.objects.filter(month__contains=[month]).order_by("?")[:4]
     serializer_class = ProductSerializer
+
+
+class PostList(generics.ListAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
