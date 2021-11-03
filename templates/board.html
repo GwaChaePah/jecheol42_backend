@@ -24,7 +24,7 @@
         <div class="card-text">
             <h3>post {{ post.id }} 의 댓글입니다.</h3>
             {% for comment in comments %}
-                {% if comment.post_key == post.id %}
+                {% if comment.post_key == post %}
                     <p>user {{ comment.user_key }} : {{ comment.content }}</p>
                 {% endif %}
             {% endfor %}
