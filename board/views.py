@@ -1,10 +1,8 @@
-import random
-
 from django.shortcuts import render
 from datetime import datetime
 from .models import Post, Comment, Product, OpenApi
 from django.db.models import Q
-from .serializers import ProductSerializer, PostSerializer
+from .serializers import ProductSerializer, PostSerializer, CommentSerializer
 from rest_framework import generics
 
 
@@ -43,3 +41,8 @@ class ProductList(generics.ListAPIView):
 class PostList(generics.ListAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+
+
+class CommentList(generics.ListAPIView):
+    queryset = Comment.objects.filter(post_key=8)
+    serializer_class = CommentSerializer
