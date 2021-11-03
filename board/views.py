@@ -2,8 +2,8 @@ from django.shortcuts import render
 from datetime import datetime
 from .models import Post, Comment, Product, OpenApi
 from django.db.models import Q
-from .serializers import ProductSerializer, PostSerializer, CommentSerializer
-from rest_framework import generics
+from .serializers import ProductSerializer, PostSerializer, CommentSerializer, SearchSerializer
+from rest_framework import generics, views, response
 
 
 def main(request):
@@ -24,10 +24,10 @@ def board(request):
 
 def search(request):
     date = datetime.now().date()
-    searchtext = '버섯'
+    search_text = '버섯'
     context = {
         # 'open_api_data': OpenApi.objects.all().order_by('id'),
-        'open_api_data': OpenApi.objects.filter(Q(item_name__contains=searchtext) | Q(kind_name__contains=searchtext)).filter(rank='중품', date=date).order_by('id'),
+        'open_api_data': OpenApi.objects.filter(Q(item_name__contains=search_text) | Q(kind_name__contains=search_text)).filter(rank='중품', date=date).order_by('id'),
     }
     return render(request, 'search.html', context)
 
@@ -46,3 +46,11 @@ class PostList(generics.ListAPIView):
 class CommentList(generics.ListAPIView):
     queryset = Comment.objects.filter(post_key=8)
     serializer_class = CommentSerializer
+
+
+class SearchList(views.APIView):
+    def get(self, request, format=None):
+        search_text = request.GET['search']
+        search_res = OpenApi.objects.filter(Q(item_name__contains=search_text) | Q(kind_name__contains=search_text))
+        serializer = SearchSerializer(search_res, many=True)
+        return response.Response(serializer.data)
