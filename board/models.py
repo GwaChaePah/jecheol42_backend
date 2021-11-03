@@ -35,7 +35,7 @@ class Product(models.Model):
 
 
 class Comment(models.Model):
-    post_key = models.PositiveIntegerField(null=False)
+    post_key = models.ForeignKey(Post, on_delete=models.CASCADE)
     content = models.TextField(max_length=400, null=False)
     user_key = models.PositiveIntegerField(null=False)
     created_at = models.DateTimeField(auto_now_add=True)

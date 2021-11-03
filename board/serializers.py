@@ -1,27 +1,20 @@
-from .models import Product, Post
+from .models import Product, Post, Comment
 from rest_framework import serializers
 
 
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ['id', 'name', 'image', 'month']
+        fields = '__all__'
 
 
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = [
-            'id',
-            'title',
-            'content',
-            'image1',
-            'image2',
-            'image3',
-            'view_count',
-            'created_at',
-            'updated_at',
-            'tag',
-            'price',
-            'user_key'
-        ]
+        fields = '__all__'
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = '__all__'
