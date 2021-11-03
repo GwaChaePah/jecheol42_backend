@@ -1,7 +1,6 @@
 from django.core.management.base import BaseCommand
 from datetime import datetime
 from board.open_api import put_data_to_api_table
-from board.models import OpenApi
 
 
 class Command(BaseCommand):
