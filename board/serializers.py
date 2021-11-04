@@ -8,10 +8,19 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class PostSerializer(serializers.ModelSerializer):
+class BoardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = '__all__'
+        fields = [
+            'id',
+            'title',
+            'image1',
+            'view_count',
+            'created_at',
+            'tag',
+            'price',
+            'user_key',
+        ]
 
 
 class CommentSerializer(serializers.ModelSerializer):
