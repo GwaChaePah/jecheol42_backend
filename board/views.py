@@ -2,9 +2,11 @@ from django.shortcuts import render
 from datetime import datetime
 from .models import Post, Comment, Product, OpenApi
 from django.db.models import Q
-from .serializers import ProductSerializer, BoardSerializer, CommentSerializer, SearchSerializer
+from .serializers import ProductSerializer, BoardSerializer, SearchSerializer
 from rest_framework import generics, views, response
 from django.http import Http404
+from django.core import serializers
+import json
 
 
 def main(request):
@@ -44,7 +46,7 @@ class BoardList(generics.ListAPIView):
     serializer_class = BoardSerializer
 
 
-class CommentList(views.APIView):
+class PostList(views.APIView):
     def get_object(self, pk):
         try:
             return Post.objects.get(id=pk)
@@ -54,8 +56,12 @@ class CommentList(views.APIView):
     def get(self, request, pk, format=None):
         post = self.get_object(pk)
         comments = Comment.objects.filter(post_key=post)
-        serializer = CommentSerializer(comments, many=True)
-        return response.Response(serializer.data)
+        post_list = [post]
+        comments_list = list(comments)
+        joined_list = post_list + comments_list
+        json_str = serializers.serialize('json', joined_list)
+        json_data = json.loads(json_str)
+        return response.Response(json_data)
 
 
 class SearchList(views.APIView):
