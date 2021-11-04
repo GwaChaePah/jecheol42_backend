@@ -4,6 +4,7 @@ from .models import Post, Comment, Product, OpenApi
 from django.db.models import Q
 from .serializers import ProductSerializer, BoardSerializer, CommentSerializer, SearchSerializer
 from rest_framework import generics, views, response
+from django.http import Http404
 
 
 def main(request):
@@ -43,9 +44,18 @@ class BoardList(generics.ListAPIView):
     serializer_class = BoardSerializer
 
 
-class CommentList(generics.ListAPIView):
-    queryset = Comment.objects.filter(post_key=8)
-    serializer_class = CommentSerializer
+class CommentList(views.APIView):
+    def get_object(self, pk):
+        try:
+            return Post.objects.get(id=pk)
+        except Post.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        post = self.get_object(pk)
+        comments = Comment.objects.filter(post_key=post)
+        serializer = CommentSerializer(comments, many=True)
+        return response.Response(serializer.data)
 
 
 class SearchList(views.APIView):
