@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from board.views import main, board, search, ProductList, PostList, CommentList, SearchList
+from board.views import main, board, search, ProductList, BoardList, CommentList, SearchList
 from rest_framework.urlpatterns import format_suffix_patterns
 
 
@@ -25,7 +25,7 @@ urlpatterns = [
     path('board/', board, name="board"),
     path('search/', search, name="search"),
     path('product-api/', ProductList.as_view()),
-    path('post-api/', PostList.as_view()),
+    path('board-api/', BoardList.as_view()),
     path('comment-api/<int:pk>/', CommentList.as_view()),
     path('search-api', SearchList.as_view()),
 ]

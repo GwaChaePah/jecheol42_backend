@@ -2,7 +2,7 @@ from django.shortcuts import render
 from datetime import datetime
 from .models import Post, Comment, Product, OpenApi
 from django.db.models import Q
-from .serializers import ProductSerializer, PostSerializer, CommentSerializer, SearchSerializer
+from .serializers import ProductSerializer, BoardSerializer, CommentSerializer, SearchSerializer
 from rest_framework import generics, views, response
 
 
@@ -38,9 +38,9 @@ class ProductList(generics.ListAPIView):
     serializer_class = ProductSerializer
 
 
-class PostList(generics.ListAPIView):
+class BoardList(generics.ListAPIView):
     queryset = Post.objects.all()
-    serializer_class = PostSerializer
+    serializer_class = BoardSerializer
 
 
 class CommentList(generics.ListAPIView):
