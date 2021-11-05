@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from board.views import main, board, search, ProductList, BoardList, PostList, SearchList
+from board.views import main, board, search, new, create, ProductList, BoardList, PostList, SearchList
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -46,6 +46,8 @@ urlpatterns = [
     path('', main, name="main"),
     path('board/', board, name="board"),
     path('search/', search, name="search"),
+    path('new/', new, name="new"),
+    path('create/', create, name="create"),
 
     # api
     path('product-api/', ProductList.as_view()),
