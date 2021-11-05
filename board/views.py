@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from datetime import datetime
 from .models import Post, Comment, Product, OpenApi
 from django.db.models import Q
@@ -49,6 +49,31 @@ def create(request):
     form = PostForm(request.POST, request.FILES or None)
     if form.is_valid():
         form.save()
+    return redirect('board')
+
+
+def edit(request, post_key):
+    post = get_object_or_404(Post, pk=post_key)
+    context = {
+        'form': PostForm(instance=post),
+        'post': post
+    }
+    return render(request, 'edit.html', context)
+
+
+@require_POST
+def update(request, post_key):
+    post = get_object_or_404(Post, pk=post_key)
+    form = PostForm(request.POST, request.FILES or None, instance=post)
+    if form.is_valid():
+        form.save()
+    return redirect('board')
+
+
+@require_POST
+def delete(request, post_key):
+    post = get_object_or_404(Post, pk=post_key)
+    post.delete()
     return redirect('board')
 
 
