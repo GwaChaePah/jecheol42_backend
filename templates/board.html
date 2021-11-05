@@ -9,6 +9,11 @@
 <div class="board-list">
 {% for post in posts %}
     <h1>post id : {{ post.id }}</h1>
+    <a href="{% url 'edit' post.id %}" class="btn btn-primary" role="button">이 글 수정하기</a>
+    <form action="{% url 'delete' post.id %}" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="삭제하기" class="btn btn-outline-primary">
+    </form>
 <div class="card" style="width: 18rem;">
     <img src="{{ post.image1.url }}" class="card-img-top" alt="...">
     {% if post.image2 != "" %}
