@@ -65,8 +65,7 @@ class PostList(views.APIView):
 
 
 class SearchList(views.APIView):
-    def get(self, request, format=None):
-        search_text = request.GET['search']
-        search_res = OpenApi.objects.filter(Q(item_name__contains=search_text) | Q(kind_name__contains=search_text))
+    def get(self, request, search, format=None):
+        search_res = OpenApi.objects.filter(Q(item_name__contains=search) | Q(kind_name__contains=search))
         serializer = SearchSerializer(search_res, many=True)
         return response.Response(serializer.data)

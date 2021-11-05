@@ -16,7 +16,6 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from board.views import main, board, search, ProductList, BoardList, PostList, SearchList
-from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -38,20 +37,19 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     # swagger
-    url(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    url(r'^swagger(?P<format>\.json)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
-    # .... jecheol-42
+
+    # jecheol-42
     path('admin/', admin.site.urls),
     path('', main, name="main"),
     path('board/', board, name="board"),
     path('search/', search, name="search"),
+
     # api
     path('product-api/', ProductList.as_view()),
     path('board-api/', BoardList.as_view()),
     path('post-api/<int:pk>/', PostList.as_view()),
-    path('search-api', SearchList.as_view()),
+    path('search-api/<str:search>/', SearchList.as_view()),
 ]
-
-
-# urlpatterns = format_suffix_patterns(urlpatterns)
