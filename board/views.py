@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from datetime import datetime
 from .models import Post, Comment, Product, OpenApi
 from django.db.models import Q
@@ -7,6 +7,8 @@ from rest_framework import generics, views, response
 from django.http import Http404
 from django.core import serializers
 import json
+from .forms import PostForm
+from django.views.decorators.http import require_POST
 
 
 def main(request):
@@ -33,6 +35,21 @@ def search(request):
         'open_api_data': OpenApi.objects.filter(Q(item_name__contains=search_text) | Q(kind_name__contains=search_text)).filter(rank='중품', date=date).order_by('id'),
     }
     return render(request, 'search.html', context)
+
+
+def new(request):
+    context = {
+        'form': PostForm()
+    }
+    return render(request, 'new.html', context)
+
+
+@require_POST
+def create(request):
+    form = PostForm(request.POST, request.FILES or None)
+    if form.is_valid():
+        form.save()
+    return redirect('board')
 
 
 class ProductList(generics.ListAPIView):
