@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>{{ post.title }}</h2>
+<div class="board-button">
+    <a href="{% url 'board' %}" class="btn btn-primary" role="button">게시판으로 돌아가기</a><br>
+     <form action="{% url 'edit' post.id %}" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="수정하기" class="btn btn-outline-primary">
+    </form>
+    <form action="{% url 'delete' post.id %}" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="삭제하기" class="btn btn-outline-primary">
+    </form>
+</div>
+<div class="card" style="width: 18rem;">
+    <img src="{{ post.image1.url }}" class="card-img-top" alt="...">
+    {% if post.image2 != "" %}
+        <img src="{{ post.image2.url }}" class="card-img-top" alt="...">
+    {% endif %}
+    {% if post.image3 != "" %}
+        <img src="{{ post.image3.url }}" class="card-img-top" alt="...">
+    {% endif %}
+    <div class="card-body">
+        <p class="card-text">{{ post.content }}</p>
+        <div class="card-text">
+            <h3>post {{ post.id }} 의 댓글입니다.</h3>
+            {% for comment in comments %}
+                {% if comment.post_key == post %}
+                    <p>user {{ comment.user_key }} : {{ comment.content }}</p>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

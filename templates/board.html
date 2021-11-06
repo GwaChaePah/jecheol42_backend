@@ -7,35 +7,23 @@
     <a href="{% url 'main' %}" class="btn btn-primary" role="button">메인으로 돌아가기</a>
 </div>
 <div class="board-list">
-{% for post in posts %}
-    <h1>post id : {{ post.id }}</h1>
-    <a href="{% url 'edit' post.id %}" class="btn btn-primary" role="button">이 글 수정하기</a>
-    <form action="{% url 'delete' post.id %}" method="POST">
-        {% csrf_token %}
-        <input type="submit" value="삭제하기" class="btn btn-outline-primary">
-    </form>
-<div class="card" style="width: 18rem;">
-    <img src="{{ post.image1.url }}" class="card-img-top" alt="...">
-    {% if post.image2 != "" %}
-        <img src="{{ post.image2.url }}" class="card-img-top" alt="...">
-    {% endif %}
-    {% if post.image3 != "" %}
-        <img src="{{ post.image3.url }}" class="card-img-top" alt="...">
-    {% endif %}
-    <div class="card-body">
-        <h5 class="card-title">{{ post.title }}</h5>
-        <p class="card-text">{{ post.content }}</p>
-{#        <a href="{% url '#' post.id %}" class="btn btn-primary">상세보기</a>#}
-        <div class="card-text">
-            <h3>post {{ post.id }} 의 댓글입니다.</h3>
-            {% for comment in comments %}
-                {% if comment.post_key == post %}
-                    <p>user {{ comment.user_key }} : {{ comment.content }}</p>
+    {% for post in posts %}
+        <h1>post id : {{ post.id }}</h1>
+        <div class="card" style="width: 18rem;">
+            <img src="{{ post.image1.url }}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <a href="{% url 'show' post.id %}" class="btn btn-primary" role="button"> {{ post.title }}</a>
+                {% if post.tag == 0 %}
+                    <h5>소분</h5>
+                {% elif post.tag == 1 %}
+                    <h5>나눔</h5>
+                {% elif post.tag == 2 %}
+                    <h5>완료</h5>
                 {% endif %}
-            {% endfor %}
+                <h5>가격 : {{ post.price }}원</h5>
+                <h5>조회수 : {{ post.view_count }}</h5>
+            </div>
         </div>
-    </div>
-</div>
-{% endfor %}
+    {% endfor %}
 </div>
 {% endblock %}

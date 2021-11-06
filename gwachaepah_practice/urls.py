@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from board.views import main, board, search, new, create, edit, update, delete, ProductList, BoardList, PostList, SearchList
+from board.views import main, board, show, search, new, create, edit, update, delete, ProductList, BoardList, PostList, SearchList
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -45,6 +45,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', main, name="main"),
     path('board/', board, name="board"),
+    path('show/<int:post_key>', show, name="show"),
     path('search/', search, name="search"),
     path('new/', new, name="new"),
     path('create/', create, name="create"),
