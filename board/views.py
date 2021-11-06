@@ -99,6 +99,22 @@ def comment_create(request, post_key):
     return redirect('show', post_key)
 
 
+@require_POST
+def comment_update(request, comment_key):
+    comment = get_object_or_404(Comment, pk=comment_key)
+    form = CommentForm(request.POST, request.FILES or None, instance=comment)
+    if form.is_valid():
+        form.save()
+    return redirect('show', comment.post_key.pk)
+
+
+@require_POST
+def comment_delete(request, comment_key):
+    comment = get_object_or_404(Comment, pk=comment_key)
+    comment.delete()
+    return redirect('show', comment.post_key.pk)
+
+
 class ProductList(generics.ListAPIView):
     month = datetime.now().month
     queryset = Product.objects.filter(month__contains=[month]).order_by("?")[:4]
