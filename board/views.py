@@ -7,7 +7,7 @@ from rest_framework import generics, views, response
 from django.http import Http404
 from django.core import serializers
 import json
-from .forms import PostForm
+from .forms import PostForm, CommentForm
 from django.views.decorators.http import require_POST
 
 
@@ -33,6 +33,7 @@ def show(request, post_key):
     context = {
         'post': post,
         'comments': Comment.objects.filter(post_key=post).order_by('created_at'),
+        'comment_form': CommentForm()
     }
     return render(request, 'show.html', context)
 
@@ -85,6 +86,14 @@ def delete(request, post_key):
     post = get_object_or_404(Post, pk=post_key)
     post.delete()
     return redirect('board')
+
+
+@require_POST
+def comment_create(request, post_key):
+    form = CommentForm(request.POST, request.FILES or None)
+    if form.is_valid():
+        form.save()
+    return redirect('show', post_key)
 
 
 class ProductList(generics.ListAPIView):
