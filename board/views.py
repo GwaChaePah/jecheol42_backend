@@ -90,9 +90,12 @@ def delete(request, post_key):
 
 @require_POST
 def comment_create(request, post_key):
+    post = get_object_or_404(Post, pk=post_key)
     form = CommentForm(request.POST, request.FILES or None)
     if form.is_valid():
-        form.save()
+        comment = form.save(commit=False)
+        comment.post_key = post
+        comment.save()
     return redirect('show', post_key)
 
 

@@ -33,7 +33,7 @@
             <form action="{% url 'comment_create' post.id %}" method="POST">
                 {% csrf_token %}
                 {{ comment_form.as_p }}
-                <input type="submit" value="댓글 수정" class="btn btn-outline-primary">
+                <input type="submit" value="댓글 달기" class="btn btn-outline-primary">
             </form>
         </div>
     </div>
