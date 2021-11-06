@@ -22,9 +22,19 @@ def main(request):
 def board(request):
     context = {
         'posts': Post.objects.all().order_by('-created_at'),
-        'comments': Comment.objects.all().order_by('created_at'),
     }
     return render(request, 'board.html', context)
+
+
+def show(request, post_key):
+    post = get_object_or_404(Post, pk=post_key)
+    post.view_count += 1
+    post.save()
+    context = {
+        'post': post,
+        'comments': Comment.objects.filter(post_key=post).order_by('created_at'),
+    }
+    return render(request, 'show.html', context)
 
 
 def search(request):
@@ -67,7 +77,7 @@ def update(request, post_key):
     form = PostForm(request.POST, request.FILES or None, instance=post)
     if form.is_valid():
         form.save()
-    return redirect('board')
+    return redirect('show', post_key)
 
 
 @require_POST
