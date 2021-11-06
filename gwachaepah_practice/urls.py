@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from board.views import main, board, show, search, new, create, edit, update, delete, comment_create, ProductList, BoardList, PostList, SearchList
+from board.views import main, board, show, search, new, create, edit, update, delete, comment_create, comment_update, comment_delete, ProductList, BoardList, PostList, SearchList
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -53,6 +53,8 @@ urlpatterns = [
     path('update/<int:post_key>', update, name="update"),
     path('delete/<int:post_key>', delete, name="delete"),
     path('comment_create/<int:post_key>/', comment_create, name="comment_create"),
+    path('comment_update/<int:comment_key>/', comment_update, name="comment_update"),
+    path('comment_delete/<int:comment_key>/', comment_delete, name="comment_delete"),
 
     # api
     path('product-api/', ProductList.as_view()),
