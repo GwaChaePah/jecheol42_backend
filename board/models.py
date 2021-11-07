@@ -1,11 +1,17 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.utils import timezone
+from datetime import datetime
 
 
 class AutoDateTimeField(models.DateTimeField):
     def pre_save(self, model_instance, add):
         return timezone.now()
+
+
+def post_directory_path(instance, filename):
+    date = str(datetime.now().date())
+    return f'user_{instance.user_key}/{date}/{filename}'
 
 
 class Post(models.Model):
@@ -17,12 +23,10 @@ class Post(models.Model):
 
     title = models.CharField(max_length=100)
     content = models.TextField()
-    image1 = models.ImageField(upload_to="posts/img/")
-    image2 = models.ImageField(upload_to="posts/img/", blank=True, null=True)
-    image3 = models.ImageField(upload_to="posts/img/", blank=True, null=True)
+    image1 = models.ImageField(upload_to=post_directory_path)
+    image2 = models.ImageField(upload_to=post_directory_path, blank=True, null=True)
+    image3 = models.ImageField(upload_to=post_directory_path, blank=True, null=True)
     view_count = models.PositiveIntegerField(default=0)
-    # created_at = models.DateTimeField(default=timezone.now)
-    # updated_at = AutoDateTimeField(default=timezone.now)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     tag = models.PositiveSmallIntegerField(choices=TAGS)
