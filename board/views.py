@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from datetime import datetime
 from .models import Post, Comment, Product, OpenApi
 from django.db.models import Q
-from .serializers import ProductSerializer, BoardSerializer, SearchSerializer
+from .serializers import ProductSerializer, BoardSerializer, PostDetailSerializer, SearchSerializer
 from rest_framework import generics, views, response
 from django.http import Http404
 from django.core import serializers
@@ -13,6 +13,7 @@ from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from collections import namedtuple
 
 
 def main(request):
@@ -176,13 +177,14 @@ class PostList(views.APIView):
 
     def get(self, request, pk):
         post = self.get_object(pk)
-        comments = Comment.objects.filter(post_key=post)
-        post_list = [post]
-        comments_list = list(comments)
-        joined_list = post_list + comments_list
-        json_str = serializers.serialize('json', joined_list)
-        json_data = json.loads(json_str)
-        return response.Response(json_data)
+        comments = Comment.objects.filter(post_key=post).order_by('id')
+        Detail = namedtuple('Detail', ('post', 'comments'))
+        detail = Detail(
+            post=post,
+            comments=comments,
+        )
+        serializer = PostDetailSerializer(detail)
+        return response.Response(serializer.data)
 
 
 class SearchList(views.APIView):

@@ -1,4 +1,4 @@
-from .models import Product, Post, OpenApi
+from .models import Product, Post, Comment, OpenApi
 from rest_framework import serializers
 
 
@@ -13,6 +13,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class BoardSerializer(serializers.ModelSerializer):
+    created_at = serializers.DateTimeField(format="%Y.%m.%d %H:%M")
     class Meta:
         model = Post
         fields = [
@@ -27,7 +28,29 @@ class BoardSerializer(serializers.ModelSerializer):
         ]
 
 
+class PostSerializer(serializers.ModelSerializer):
+    created_at = serializers.DateTimeField(format="%Y.%m.%d %H:%M")
+    updated_at = serializers.DateTimeField(format="%Y.%m.%d %H:%M")
+    class Meta:
+        model = Post
+        fields = '__all__'
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    created_at = serializers.DateTimeField(format="%Y.%m.%d %H:%M")
+    updated_at = serializers.DateTimeField(format="%Y.%m.%d %H:%M")
+    class Meta:
+        model = Comment
+        fields = '__all__'
+
+
+class PostDetailSerializer(serializers.Serializer):
+    post = PostSerializer()
+    comments = CommentSerializer(many=True)
+
+
 class SearchSerializer(serializers.ModelSerializer):
+    created_at = serializers.DateTimeField(format="%Y.%m.%d %H:%M")
     class Meta:
         model = OpenApi
         fields = '__all__'
