@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from datetime import datetime
 from .models import Post, Comment, Product, OpenApi
 from django.db.models import Q
-from .serializers import ProductSerializer, BoardSerializer, SearchSerializer
+from .serializers import ProductSerializer, BoardSerializer
 from rest_framework import generics, views, response
 from django.http import Http404
 from django.core import serializers
@@ -45,7 +45,9 @@ def search(request):
     search_text = '버섯'
     context = {
         # 'open_api_data': OpenApi.objects.all().order_by('id'),
-        'open_api_data': OpenApi.objects.filter(Q(item_name__contains=search_text) | Q(kind_name__contains=search_text)).filter(rank='중품', date=date).order_by('id'),
+        'open_api_data': OpenApi.objects.filter(
+            Q(item_name__contains=search_text) | Q(kind_name__contains=search_text)).filter(rank='중품',
+                                                                                            date=date).order_by('id'),
     }
     return render(request, 'search.html', context)
 
@@ -143,20 +145,24 @@ class PostList(views.APIView):
         joined_list = post_list + comments_list
         json_str = serializers.serialize('json', joined_list)
         json_data = json.loads(json_str)
-        return response.Response(json_data)
 
 
 class SearchList(views.APIView):
     search_param = openapi.Parameter(
         'search',
         openapi.IN_QUERY,
-        description = '여기에 검색어를 넣고 execute 하세요',
-        type = openapi.TYPE_STRING,
+        description='여기에 검색어를 넣고 execute 하세요',
+        type=openapi.TYPE_STRING,
     )
 
     @swagger_auto_schema(manual_parameters=[search_param])
     def get(self, request):
         search_text = request.GET['search']
-        search_res = OpenApi.objects.filter(Q(item_name__contains=search_text) | Q(kind_name__contains=search_text))
-        serializer = SearchSerializer(search_res, many=True)
-        return response.Response(serializer.data)
+        open_api_res = OpenApi.objects.filter(Q(item_name__contains=search_text) | Q(kind_name__contains=search_text)).order_by('-date')
+        board_res = Post.objects.filter(Q(title__contains=search_text) | Q(content__contains=search_text)).order_by('-id')
+        open_api_list = list(open_api_res)
+        board_list = list(board_res)
+        joined_list = open_api_list + board_list
+        json_str = serializers.serialize('json', joined_list)
+        json_data = json.loads(json_str)
+        return response.Response(json_data)
