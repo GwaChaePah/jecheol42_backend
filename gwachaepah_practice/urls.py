@@ -60,5 +60,5 @@ urlpatterns = [
     path('product-api/', ProductList.as_view()),
     path('board-api/', BoardList.as_view()),
     path('post-api/<int:pk>/', PostList.as_view()),
-    path('search-api/<str:search>/', SearchList.as_view()),
+    path('search-api', SearchList.as_view()),
 ]
