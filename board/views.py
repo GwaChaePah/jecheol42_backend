@@ -122,7 +122,7 @@ class ProductList(generics.ListAPIView):
 
 
 class BoardList(generics.ListAPIView):
-    queryset = Post.objects.all()
+    queryset = Post.objects.all().order_by('-id')
     serializer_class = BoardSerializer
 
 
@@ -133,7 +133,7 @@ class PostList(views.APIView):
         except Post.DoesNotExist:
             raise Http404
 
-    def get(self, request, pk, format=None):
+    def get(self, request, pk):
         post = self.get_object(pk)
         comments = Comment.objects.filter(post_key=post)
         post_list = [post]
@@ -145,7 +145,7 @@ class PostList(views.APIView):
 
 
 class SearchList(views.APIView):
-    def get(self, request, search, format=None):
+    def get(self, request, search):
         search_res = OpenApi.objects.filter(Q(item_name__contains=search) | Q(kind_name__contains=search))
         serializer = SearchSerializer(search_res, many=True)
         return response.Response(serializer.data)
