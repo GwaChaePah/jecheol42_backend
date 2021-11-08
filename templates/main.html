@@ -4,6 +4,11 @@
 <div class="container-main">
 	<h1>과채파</h1>
 	<h2>|제철42|에 오신 것을 환영합니다 :)</h2>
+	<form action="{% url 'user_login' %}" method="POST" enctype="multipart/form-data">
+		{% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="로그인" class="btn btn-outline-primary">
+	</form>
 	<a class="btn btn-primary" href="{% url 'board' %}" role="button">소분/나눔 게시판으로 이동하기</a>
     <div class="product-list">
         <H3>이번달 제철은...</H3>

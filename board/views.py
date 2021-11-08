@@ -7,20 +7,24 @@ from rest_framework import generics, views, response
 from django.http import Http404
 from django.core import serializers
 import json
-from .forms import PostForm, CommentForm
+from .forms import PostForm, CommentForm, LoginForm
 from django.views.decorators.http import require_POST
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 
 def main(request):
     month = datetime.now().month
     context = {
         'products': Product.objects.filter(month__contains=[month]).order_by("?")[:4],
+        'form': LoginForm()
     }
     return render(request, 'main.html', context)
 
 
+@login_required
 def board(request):
     context = {
         'posts': Post.objects.all().order_by('-created_at'),
@@ -52,6 +56,7 @@ def search(request):
     return render(request, 'search.html', context)
 
 
+@login_required
 def new(request):
     context = {
         'form': PostForm()
@@ -145,6 +150,7 @@ class PostList(views.APIView):
         joined_list = post_list + comments_list
         json_str = serializers.serialize('json', joined_list)
         json_data = json.loads(json_str)
+        return response.Response(json_data)
 
 
 class SearchList(views.APIView):
@@ -166,3 +172,19 @@ class SearchList(views.APIView):
         json_str = serializers.serialize('json', joined_list)
         json_data = json.loads(json_str)
         return response.Response(json_data)
+
+
+def user_login(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+        login(request, user)
+        return redirect('board')
+    else:
+        return redirect('main')
+
+
+def user_logout(request):
+    logout(request)
+    return redirect('main')
