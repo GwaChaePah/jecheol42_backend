@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from datetime import datetime
 from .models import Post, Comment, Product, OpenApi
 from django.db.models import Q
-from .serializers import ProductSerializer, BoardSerializer
+from .serializers import ProductSerializer, BoardSerializer, SearchSerializer
 from rest_framework import generics, views, response
 from django.http import Http404
 from django.core import serializers
@@ -130,9 +130,41 @@ class ProductList(generics.ListAPIView):
     serializer_class = ProductSerializer
 
 
-class BoardList(generics.ListAPIView):
-    queryset = Post.objects.all().order_by('-id')
-    serializer_class = BoardSerializer
+class BoardList(views.APIView):
+    search_param = openapi.Parameter(
+        'search',
+        openapi.IN_QUERY,
+        description='여기에 검색어를 넣고 execute 하세요',
+        type=openapi.TYPE_STRING,
+    )
+
+    tag_param = openapi.Parameter(
+        'tag',
+        openapi.IN_QUERY,
+        description='소분:0/나눔:1/완료:2 태그를 선택하세요',
+        type=openapi.TYPE_INTEGER
+    )
+
+    def get_search(self, request):
+        try:
+            search_text = request.GET['search']
+        except:
+            return Post.objects.all().order_by('-id')
+        return Post.objects.filter(Q(title__contains=search_text) | Q(content__contains=search_text)).order_by('-id')
+
+    def get_tag(self, request, search_res):
+        try:
+            tag_type = request.GET['tag']
+        except:
+            return search_res
+        return search_res.filter(tag=tag_type)
+
+    @swagger_auto_schema(manual_parameters=[search_param, tag_param])
+    def get(self, request):
+        search_res = self.get_search(request)
+        result = self.get_tag(request, search_res)
+        serializer = BoardSerializer(result, many=True)
+        return response.Response(serializer.data)
 
 
 class PostList(views.APIView):
@@ -164,14 +196,9 @@ class SearchList(views.APIView):
     @swagger_auto_schema(manual_parameters=[search_param])
     def get(self, request):
         search_text = request.GET['search']
-        open_api_res = OpenApi.objects.filter(Q(item_name__contains=search_text) | Q(kind_name__contains=search_text)).order_by('-date')
-        board_res = Post.objects.filter(Q(title__contains=search_text) | Q(content__contains=search_text)).order_by('-id')
-        open_api_list = list(open_api_res)
-        board_list = list(board_res)
-        joined_list = open_api_list + board_list
-        json_str = serializers.serialize('json', joined_list)
-        json_data = json.loads(json_str)
-        return response.Response(json_data)
+        search_res = OpenApi.objects.filter(Q(item_name__contains=search_text) | Q(kind_name__contains=search_text))
+        serializer = SearchSerializer(search_res, many=True)
+        return response.Response(serializer.data)
 
 
 def user_login(request):
