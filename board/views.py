@@ -9,6 +9,8 @@ from django.core import serializers
 import json
 from .forms import PostForm, CommentForm
 from django.views.decorators.http import require_POST
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 
 
 def main(request):
@@ -145,7 +147,16 @@ class PostList(views.APIView):
 
 
 class SearchList(views.APIView):
-    def get(self, request, search):
-        search_res = OpenApi.objects.filter(Q(item_name__contains=search) | Q(kind_name__contains=search))
+    search_param = openapi.Parameter(
+        'search',
+        openapi.IN_QUERY,
+        description = '여기에 검색어를 넣고 execute 하세요',
+        type = openapi.TYPE_STRING,
+    )
+
+    @swagger_auto_schema(manual_parameters=[search_param])
+    def get(self, request):
+        search_text = request.GET['search']
+        search_res = OpenApi.objects.filter(Q(item_name__contains=search_text) | Q(kind_name__contains=search_text))
         serializer = SearchSerializer(search_res, many=True)
         return response.Response(serializer.data)
