@@ -145,16 +145,25 @@ class BoardList(views.APIView):
         type=openapi.TYPE_INTEGER
     )
 
-    @swagger_auto_schema(manual_parameters=[search_param, tag_param])
-    def get(self, request):
-        search_text = request.GET['search']
-        search_res = Post.objects.filter(Q(title__contains=search_text) | Q(content__contains=search_text))
+    def get_search(self, request):
+        try:
+            search_text = request.GET['search']
+        except:
+            return Post.objects.all().order_by('-id')
+        return Post.objects.filter(Q(title__contains=search_text) | Q(content__contains=search_text)).order_by('-id')
+
+    def get_tag(self, request, search_res):
         try:
             tag_type = request.GET['tag']
         except:
-            serializer = BoardSerializer(search_res, many=True)
-            return response.Response(serializer.data)
-        serializer = BoardSerializer(search_res.filter(tag=tag_type), many=True)
+            return search_res
+        return search_res.filter(tag=tag_type)
+
+    @swagger_auto_schema(manual_parameters=[search_param, tag_param])
+    def get(self, request):
+        search_res = self.get_search(request)
+        result = self.get_tag(request, search_res)
+        serializer = BoardSerializer(result, many=True)
         return response.Response(serializer.data)
 
 
