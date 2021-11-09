@@ -16,11 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from board.views import main, board, show, search, new, create, edit, update, delete, comment_create, comment_update,\
-    comment_delete, ProductList, BoardList, PostList, SearchList, user_login, user_logout
+    comment_delete, ProductList, BoardList, PostList, SearchList, user_login, user_logout, TestView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from django.conf.urls import url
+from rest_framework_simplejwt import views as jwt_views
+
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -65,5 +67,12 @@ urlpatterns = [
 
     # user
     path('user_login/', user_login, name="user_login"),
-    path('user_logout/', user_logout, name="user_logout")
+    path('user_logout/', user_logout, name="user_logout"),
+
+    # jwt
+    path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+
+    # test
+    path('hello/', TestView.as_view(), name='TestView')
 ]
