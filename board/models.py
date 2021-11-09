@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.utils import timezone
 from datetime import datetime
+from django.contrib.auth.models import User
 
 
 class AutoDateTimeField(models.DateTimeField):
@@ -31,7 +32,7 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     tag = models.PositiveSmallIntegerField(choices=TAGS)
     price = models.PositiveIntegerField(default=0)
-    user_key = models.PositiveIntegerField()
+    user_key = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
 class Product(models.Model):
@@ -43,7 +44,7 @@ class Product(models.Model):
 class Comment(models.Model):
     post_key = models.ForeignKey(Post, on_delete=models.CASCADE)
     content = models.TextField(max_length=400, null=False)
-    user_key = models.PositiveIntegerField(null=False)
+    user_key = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

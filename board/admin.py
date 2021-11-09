@@ -16,6 +16,7 @@ class PostAdmin(admin.ModelAdmin):
         'price',
         'created_at',
         'updated_at',
+        'user_key',
     )
     search_fields = (
         'title',
