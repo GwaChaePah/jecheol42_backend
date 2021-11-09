@@ -13,7 +13,7 @@
     {% for post in posts %}
         <h1>post id : {{ post.id }}</h1>
         <div class="card" style="width: 18rem;">
-            <img src="{{ post.image1.url }}" class="card-img-top" alt="...">
+            <img src="{{ post.image1.url }}" class="card-img-top" alt="..." width="300">
             <div class="card-body">
                 <a href="{% url 'show' post.id %}" class="btn btn-primary" role="button"> {{ post.title }}</a>
                 {% if post.tag == 0 %}

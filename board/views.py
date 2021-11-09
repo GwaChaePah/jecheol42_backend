@@ -198,8 +198,9 @@ class SearchList(views.APIView):
     @swagger_auto_schema(manual_parameters=[search_param])
     def get(self, request):
         search_text = request.GET['search']
-        search_res = OpenApi.objects.filter(Q(item_name__contains=search_text) | Q(kind_name__contains=search_text))
-        serializer = SearchSerializer(search_res, many=True)
+        search_res = OpenApi.objects.filter(Q(item_name=search_text) | Q(kind_name__startswith=search_text))
+        result = search_res.exclude(price="-").order_by('-id')
+        serializer = SearchSerializer(result, many=True)
         return response.Response(serializer.data)
 
 
