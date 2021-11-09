@@ -3,7 +3,7 @@ from datetime import datetime
 from .models import Post, Comment, Product, OpenApi
 from django.db.models import Q
 from .serializers import ProductSerializer, BoardSerializer, PostDetailSerializer, SearchSerializer
-from rest_framework import generics, views, response
+from rest_framework import generics, views, response, permissions
 from django.http import Http404
 from django.core import serializers
 import json
@@ -218,3 +218,11 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect('main')
+
+
+class TestView(views.APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request):
+        content = {'message': 'gwachaepah'}
+        return response.Response(content)
