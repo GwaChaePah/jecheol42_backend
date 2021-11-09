@@ -68,8 +68,11 @@ def new(request):
 @require_POST
 def create(request):
     form = PostForm(request.POST, request.FILES or None)
+    user = request.user
     if form.is_valid():
-        form.save()
+        post = form.save(commit=False)
+        post.user_key = user
+        post.save()
     return redirect('board')
 
 
@@ -101,10 +104,12 @@ def delete(request, post_key):
 @require_POST
 def comment_create(request, post_key):
     post = get_object_or_404(Post, pk=post_key)
+    user = request.user
     form = CommentForm(request.POST, request.FILES or None)
     if form.is_valid():
         comment = form.save(commit=False)
         comment.post_key = post
+        comment.user_key = user
         comment.save()
     return redirect('show', post_key)
 
