@@ -14,7 +14,6 @@ class PostForm(forms.ModelForm):
             'image2',
             'image3',
             'price',
-            # 'user_key'
         ]
         labels = {
             'title': '제목',
@@ -34,10 +33,6 @@ class PostForm(forms.ModelForm):
                 'class': 'form-control',
                 'min': 0
             }),
-            # 'user_key': forms.NumberInput(attrs={
-            #     'class': 'form-control',
-            #     'min': 0
-            # })
         }
 
 
@@ -46,16 +41,11 @@ class CommentForm(forms.ModelForm):
         model = Comment
         fields = [
             'content',
-            'user_key'
         ]
         widgets = {
             'content': forms.TextInput(attrs={
                 'class': 'form-control'
             }),
-            # 'user_key': forms.NumberInput(attrs={
-            #     'class': 'form-control',
-            #     'min': 0
-            # })
         }
 
 
