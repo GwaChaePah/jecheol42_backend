@@ -29,16 +29,16 @@ class BoardSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    created_at = serializers.DateTimeField(format="%Y.%m.%d %H:%M")
-    updated_at = serializers.DateTimeField(format="%Y.%m.%d %H:%M")
+    # created_at = serializers.DateTimeField(format="%Y.%m.%d %H:%M")
+    # updated_at = serializers.DateTimeField(format="%Y.%m.%d %H:%M")
     class Meta:
         model = Post
         fields = '__all__'
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    created_at = serializers.DateTimeField(format="%Y.%m.%d %H:%M")
-    updated_at = serializers.DateTimeField(format="%Y.%m.%d %H:%M")
+    # created_at = serializers.DateTimeField(format="%Y.%m.%d %H:%M")
+    # updated_at = serializers.DateTimeField(format="%Y.%m.%d %H:%M")
     class Meta:
         model = Comment
         fields = '__all__'

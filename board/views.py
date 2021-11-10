@@ -2,10 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from datetime import datetime
 from .models import Post, Comment, Product, OpenApi
 from django.db.models import Q
-from .serializers import ProductSerializer, BoardSerializer, PostDetailSerializer, PostSerializer, SearchSerializer
+from .serializers import ProductSerializer, BoardSerializer, PostDetailSerializer, PostSerializer, CommentSerializer, SearchSerializer
 from rest_framework import generics, views, response, permissions, status
 from django.http import Http404
-from django.core import serializers
 from .forms import PostForm, CommentForm, LoginForm
 from django.views.decorators.http import require_POST
 from drf_yasg import openapi
@@ -175,11 +174,11 @@ class BoardList(views.APIView):
         serializer = BoardSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return response.Response(serializer.data, status=status.HTTP_200_CREATED)
+            return response.Response(serializer.data, status=status.HTTP_201_CREATED)
         return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class PostList(views.APIView):
+class PostCommentList(views.APIView):
     def get_object(self, pk):
         try:
             return Post.objects.get(id=pk)
@@ -197,26 +196,39 @@ class PostList(views.APIView):
         serializer = PostDetailSerializer(detail)
         return response.Response(serializer.data)
 
-    # post_param = openapi.Parameter(
-    #     'title',
-    #     openapi.IN_QUERY,
-    #     description='여기에 검색어를 넣고 execute 하세요',
-    #     type=openapi.TYPE_STRING,
-    # )
-    #
-    # @swagger_auto_schema(manual_parameters=[post_param])
-    def put(self, request, pk):
+
+class PostList(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+
+class CommentList(generics.GenericAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+    def get_object(self, pk):
+        try:
+            return Post.objects.get(id=pk)
+        except Post.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk):
         post = self.get_object(pk)
-        serializer = PostSerializer(post, data=request.data)
+        comments = Comment.objects.filter(post_key=post).order_by('id')
+        serializer = CommentSerializer(comments, many=True)
+        return response.Response(serializer.data)
+
+    def post(self, request):
+        serializer = CommentSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return response.Response(serializer.data)
+            return response.Response(serializer.data, status=status.HTTP_201_CREATED)
         return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, pk):
-        post = self.get_object(pk)
-        post.delete()
-        return response.Response(status=status.HTTP_204_NO_CONTENT)
+
+class CommentDetailList(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
 
 
 class SearchList(views.APIView):
