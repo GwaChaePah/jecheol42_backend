@@ -178,10 +178,11 @@ class BoardList(views.APIView):
     def post(self, request):
         # 임시로 프론트가 새글쓰기 가능하도록 임의의 유저를 넣어준다
         try:
-            user = User.objects.get(username=request.data.user_key)
+            user = User.objects.get(pk=request.data["user_key"])
         except:
-            user = User.objects.all().order_by('?')[0]
-        request.data.user = user
+            pks = User.objects.values_list('pk', flat=True)
+            user = User.objects.get(pk=choice(pks))
+        request.data["user_key"] = user.pk
         # 나중에 여기 위에 까지 지우기
         serializer = BoardSerializer(data=request.data)
         if serializer.is_valid():
