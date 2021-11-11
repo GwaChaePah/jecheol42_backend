@@ -10,7 +10,8 @@ from django.dispatch import receiver
 class Profile(models.Model):
     user_key = models.OneToOneField(
         User,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        primary_key=True
     )
     local = models.PositiveIntegerField(default=0)
 

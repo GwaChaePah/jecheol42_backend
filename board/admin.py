@@ -73,7 +73,6 @@ class OpenApiAdmin(admin.ModelAdmin):
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
     list_display = (
-        'id',
         'user_key',
         'local',
     )
