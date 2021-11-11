@@ -13,6 +13,7 @@ from drf_yasg.utils import swagger_auto_schema
 from django.contrib.auth import authenticate, login, logout, models
 from django.contrib.auth.decorators import login_required
 from collections import namedtuple
+from random import choice
 
 
 def main(request):
@@ -136,6 +137,9 @@ class ProductList(generics.ListAPIView):
 
 
 class BoardList(views.APIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
     search_param = openapi.Parameter(
         'search',
         openapi.IN_QUERY,
@@ -174,10 +178,11 @@ class BoardList(views.APIView):
     def post(self, request):
         # 임시로 프론트가 새글쓰기 가능하도록 임의의 유저를 넣어준다
         try:
-            user = User.objects.get(username=request.data.user).pk
+            user = User.objects.get(pk=request.data["user_key"])
         except:
-            user = User.objects.order_by('?')[0].pk
-        request.data.user = user
+            pks = User.objects.values_list('pk', flat=True)
+            user = User.objects.get(pk=choice(pks))
+        request.data["user_key"] = user.pk
         # 나중에 여기 위에 까지 지우기
         serializer = BoardSerializer(data=request.data)
         if serializer.is_valid():
@@ -230,13 +235,14 @@ class CommentList(generics.GenericAPIView):
         serializer = CommentSerializer(comments, many=True)
         return response.Response(serializer.data)
 
-    def post(self, request):
+    def post(self, request, pk):
         # 임시로 프론트가 새글쓰기 가능하도록 임의의 유저를 넣어준다
         try:
-            user = User.objects.get(username=request.data.user).pk
+            user = User.objects.get(pk=request.data["user_key"])
         except:
-            user = User.objects.order_by('?')[0].pk
-        request.data.user = user
+            pks = User.objects.values_list('pk', flat=True)
+            user = User.objects.get(pk=choice(pks))
+        request.data["user_key"] = user.pk
         # 나중에 여기 위에 까지 지우기
         serializer = CommentSerializer(data=request.data)
         if serializer.is_valid():
