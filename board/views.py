@@ -201,6 +201,10 @@ class PostList(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
+    def update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return super().update(request, *args, **kwargs)
+
 
 class CommentList(generics.GenericAPIView):
     queryset = Comment.objects.all()
