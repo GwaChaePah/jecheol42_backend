@@ -159,8 +159,8 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 12
 }
 
-CORS_ALLOWED_ORIGINS = [
-    "https://127.0.0.1:8000",
-    "https://127.0.0.1:8080",
-    # "https://jecheol-42.herokuapp.com/"
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "https://127.0.0.1:8000",
+#     "https://127.0.0.1:8080",
+#     # "https://jecheol-42.herokuapp.com/"
+# ]
