@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from datetime import datetime
 from .models import Post, Comment, Product, OpenApi
+from django.contrib.auth.models import User
 from django.db.models import Q
 from .serializers import ProductSerializer, BoardSerializer, PostDetailSerializer, PostSerializer, CommentSerializer, SearchSerializer
 from rest_framework import generics, views, response, permissions, status
@@ -171,6 +172,13 @@ class BoardList(views.APIView):
         return response.Response(serializer.data)
 
     def post(self, request):
+        # 임시로 프론트가 새글쓰기 가능하도록 임의의 유저를 넣어준다
+        try:
+            user = User.objects.get(username=request.data.user).pk
+        except:
+            user = User.objects.order_by('?')[0].pk
+        request.data.user = user
+        # 나중에 여기 위에 까지 지우기
         serializer = BoardSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -223,6 +231,13 @@ class CommentList(generics.GenericAPIView):
         return response.Response(serializer.data)
 
     def post(self, request):
+        # 임시로 프론트가 새글쓰기 가능하도록 임의의 유저를 넣어준다
+        try:
+            user = User.objects.get(username=request.data.user).pk
+        except:
+            user = User.objects.order_by('?')[0].pk
+        request.data.user = user
+        # 나중에 여기 위에 까지 지우기
         serializer = CommentSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
