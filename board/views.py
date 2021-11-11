@@ -5,11 +5,11 @@ from django.db.models import Q
 from .serializers import ProductSerializer, BoardSerializer, PostDetailSerializer, PostSerializer, CommentSerializer, SearchSerializer
 from rest_framework import generics, views, response, permissions, status
 from django.http import Http404
-from .forms import PostForm, CommentForm, LoginForm
+from .forms import PostForm, CommentForm, LoginForm, RegisterForm
 from django.views.decorators.http import require_POST
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, models
 from django.contrib.auth.decorators import login_required
 from collections import namedtuple
 
@@ -266,6 +266,27 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect('main')
+
+
+def register(request):
+    context = {
+        'form': RegisterForm()
+    }
+    return render(request, 'user_register.html', context)
+
+
+def user_register(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            user.refresh_from_db()  # load the profile instance created by the signal
+            user.profile.local = form.cleaned_data.get('local')
+            user.save()
+            return redirect('main')
+    else:
+        form = RegisterForm()
+    return render(request, 'user_register.html', {'form': form})
 
 
 class TestView(views.APIView):

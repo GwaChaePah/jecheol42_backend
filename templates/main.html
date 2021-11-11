@@ -9,6 +9,7 @@
         {{ form.as_p }}
         <input type="submit" value="로그인" class="btn btn-outline-primary">
 	</form>
+	<a class="btn btn-outline-primary" href="{% url 'register' %}" role="button">회원가입</a>
 	<a class="btn btn-primary" href="{% url 'board' %}" role="button">소분/나눔 게시판으로 이동하기</a>
     <div class="product-list">
         <H3>이번달 제철은...</H3>
