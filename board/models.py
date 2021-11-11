@@ -3,6 +3,8 @@ from django.contrib.postgres.fields import ArrayField
 from django.utils import timezone
 from datetime import datetime
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class Profile(models.Model):
@@ -11,6 +13,12 @@ class Profile(models.Model):
         on_delete=models.CASCADE
     )
     local = models.PositiveIntegerField(default=0)
+
+@receiver(post_save, sender=User)
+def update_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user_key=instance)
+    instance.profile.save()
 
 
 class AutoDateTimeField(models.DateTimeField):

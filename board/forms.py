@@ -1,6 +1,7 @@
 from django import forms
-from .models import Post, Comment
+from .models import Post, Comment, Profile
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 
 
 class PostForm(forms.ModelForm):
@@ -63,4 +64,25 @@ class LoginForm(forms.ModelForm):
             'password': forms.TextInput(attrs={
                 'class': 'form-control'
             })
+        }
+
+
+class RegisterForm(UserCreationForm):
+    local = forms.IntegerField()
+
+    class Meta:
+        model = User
+        fields = (
+            'username',
+            'local',
+        )
+
+        widgets = {
+            'username': forms.TextInput(attrs={
+                'class': 'form-control'
+            }),
+            'local': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
         }
