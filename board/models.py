@@ -5,6 +5,14 @@ from datetime import datetime
 from django.contrib.auth.models import User
 
 
+class Profile(models.Model):
+    user_key = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE
+    )
+    local = models.PositiveIntegerField(default=0)
+
+
 class AutoDateTimeField(models.DateTimeField):
     def pre_save(self, model_instance, add):
         return timezone.now()
