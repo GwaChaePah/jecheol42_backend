@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     'cloudinary_storage',
     'rest_framework',
     'drf_yasg',
-    'rest_framework_simplejwt'
+    'rest_framework_simplejwt',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -62,6 +63,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware'
 ]
 
 ROOT_URLCONF = 'gwachaepah_practice.urls'
@@ -155,3 +158,9 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 12
 }
+
+CORS_ALLOWED_ORIGINS = [
+    "https://127.0.0.1:8000",
+    "https://127.0.0.1:8080",
+    # "https://jecheol-42.herokuapp.com/"
+]
