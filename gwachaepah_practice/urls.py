@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from board.views import main, board, show, search, new, create, edit, update, delete,\
     comment_create, comment_update, comment_delete,\
-    ProductList, BoardList, PostCommentList, PostList, CommentList, CommentDetailList, SearchList,\
+    ProductList, BoardSearchList, BoardList, PostCommentList, PostList, CommentList, CommentDetailList, SearchList,\
     user_login, user_logout, register, user_register, TestView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
@@ -63,11 +63,12 @@ urlpatterns = [
 
     # api
     path('product-api/', ProductList.as_view()),
-    path('board-api', BoardList.as_view()),
-    path('post_comment-api/<int:pk>/', PostCommentList.as_view()),
-    path('post-api/<int:pk>/', PostList.as_view()),
-    path('comment-api/<int:pk>/', CommentList.as_view()),
-    path('comment_detail-api/<int:pk>/', CommentDetailList.as_view()),
+    path('board-api', BoardSearchList.as_view()), # 쿼리 스트링 받아서 필터링
+    path('board-api/', BoardList.as_view()), # 전체 보드 데이터 + 페이지네이션 get, 새 글 작성 post
+    path('post_comment-api/<int:pk>/', PostCommentList.as_view()), # 포스트 페이지에서 보일 특정 포스트 + 코멘트 리스트 get
+    path('post-api/<int:pk>/', PostList.as_view()), # 특정 포스트의 put(+patch) delete
+    path('comment-api/', CommentList.as_view()), # 특정 포스트 pk 에 코멘트를 post
+    path('comment-api/<int:pk>/', CommentDetailList.as_view()), # 특정 코멘트 pk 의 코멘트를 put get delete
     path('search-api', SearchList.as_view()),
 
     # user

@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from datetime import datetime
+from rest_framework.parsers import MultiPartParser
 from .models import Post, Comment, Product, OpenApi
 from django.contrib.auth.models import User
 from django.db.models import Q
@@ -136,10 +137,7 @@ class ProductList(generics.ListAPIView):
     serializer_class = ProductSerializer
 
 
-class BoardList(views.APIView):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
-
+class BoardSearchList(generics.ListAPIView):
     search_param = openapi.Parameter(
         'search',
         openapi.IN_QUERY,
@@ -169,26 +167,32 @@ class BoardList(views.APIView):
         return search_res.filter(tag=tag_type)
 
     @swagger_auto_schema(manual_parameters=[search_param, tag_param])
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         search_res = self.get_search(request)
         result = self.get_tag(request, search_res)
         serializer = BoardSerializer(result, many=True)
         return response.Response(serializer.data)
 
+
+class BoardList(generics.ListCreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    parser_classes = (MultiPartParser,)
+
+    # 임시로 프론트가 새글쓰기 가능하도록 임의의 유저를 넣어준다
     def post(self, request):
-        # 임시로 프론트가 새글쓰기 가능하도록 임의의 유저를 넣어준다
         try:
             user = User.objects.get(pk=request.data["user_key"])
         except:
             pks = User.objects.values_list('pk', flat=True)
             user = User.objects.get(pk=choice(pks))
         request.data["user_key"] = user.pk
-        # 나중에 여기 위에 까지 지우기
-        serializer = BoardSerializer(data=request.data)
+        serializer = PostSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return response.Response(serializer.data, status=status.HTTP_201_CREATED)
         return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # 나중에 여기 위에 까지 지우기
 
 
 class PostCommentList(views.APIView):
