@@ -194,7 +194,7 @@ class BoardList(generics.ListCreateAPIView):
         if serializer.is_valid():
             serializer.save()
             return response.Response(serializer.data, status=status.HTTP_201_CREATED)
-        return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return response.Response(serializer.errors, status=status.HTTP_418_IM_A_TEAPOT)
     # 나중에 여기 위에 까지 지우기
 
 
@@ -244,7 +244,7 @@ class CommentList(generics.CreateAPIView):
         if serializer.is_valid():
             serializer.save()
             return response.Response(serializer.data, status=status.HTTP_201_CREATED)
-        return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return response.Response(serializer.errors, status=status.HTTP_418_IM_A_TEAPOT)
         # 나중에 여기 위에 까지 지우기
 
 
