@@ -138,6 +138,9 @@ class ProductList(generics.ListAPIView):
 
 
 class BoardSearchList(generics.ListAPIView):
+    queryset = Post.objects.all()
+    serializer_class = BoardSerializer
+
     search_param = openapi.Parameter(
         'search',
         openapi.IN_QUERY,
@@ -219,9 +222,9 @@ class PostList(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PostSerializer
     parser_classes = (MultiPartParser,)
 
-    # def update(self, request, *args, **kwargs):
-    #     kwargs['partial'] = True
-    #     return super().update(request, *args, **kwargs)
+    def update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return super().update(request, *args, **kwargs)
 
 
 class CommentList(generics.CreateAPIView):
@@ -248,6 +251,10 @@ class CommentList(generics.CreateAPIView):
 class CommentDetailList(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+
+    def update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return super().update(request, *args, **kwargs)
 
 
 class SearchList(views.APIView):
