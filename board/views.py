@@ -217,42 +217,32 @@ class PostCommentList(views.APIView):
 class PostList(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    parser_classes = (MultiPartParser,)
 
-    def update(self, request, *args, **kwargs):
-        kwargs['partial'] = True
-        return super().update(request, *args, **kwargs)
+    # def update(self, request, *args, **kwargs):
+    #     kwargs['partial'] = True
+    #     return super().update(request, *args, **kwargs)
 
 
-class CommentList(generics.GenericAPIView):
+class CommentList(generics.CreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
-    def get_object(self, pk):
-        try:
-            return Post.objects.get(id=pk)
-        except Post.DoesNotExist:
-            raise Http404
-
-    def get(self, request, pk):
-        post = self.get_object(pk)
-        comments = Comment.objects.filter(post_key=post).order_by('id')
-        serializer = CommentSerializer(comments, many=True)
-        return response.Response(serializer.data)
-
-    def post(self, request, pk):
-        # 임시로 프론트가 새글쓰기 가능하도록 임의의 유저를 넣어준다
+    # 임시로 프론트가 새글쓰기 가능하도록 임의의 유저를 넣어준다
+    def post(self, request):
         try:
             user = User.objects.get(pk=request.data["user_key"])
         except:
             pks = User.objects.values_list('pk', flat=True)
             user = User.objects.get(pk=choice(pks))
         request.data["user_key"] = user.pk
-        # 나중에 여기 위에 까지 지우기
+
         serializer = CommentSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return response.Response(serializer.data, status=status.HTTP_201_CREATED)
         return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # 나중에 여기 위에 까지 지우기
 
 
 class CommentDetailList(generics.RetrieveUpdateDestroyAPIView):
