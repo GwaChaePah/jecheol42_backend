@@ -251,7 +251,7 @@ class CommentList(generics.CreateAPIView):
 class CommentDetailList(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    parser_classes = (MultiPartParser,)
+    # parser_classes = (MultiPartParser,)
 
     def update(self, request, *args, **kwargs):
         kwargs['partial'] = True
