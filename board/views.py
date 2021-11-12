@@ -180,7 +180,7 @@ class BoardSearchList(generics.ListAPIView):
 class BoardList(generics.ListCreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    # parser_classes = (MultiPartParser,)
+    parser_classes = (MultiPartParser,)
 
     # 임시로 프론트가 새글쓰기 가능하도록 임의의 유저를 넣어준다
     def post(self, request):
