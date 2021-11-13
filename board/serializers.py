@@ -1,5 +1,6 @@
 from .models import Product, Post, Comment, OpenApi
 from rest_framework import serializers
+from django.contrib.auth.models import User
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -48,3 +49,11 @@ class SearchSerializer(serializers.ModelSerializer):
     class Meta:
         model = OpenApi
         fields = '__all__'
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'username',
+        ]
