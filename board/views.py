@@ -178,7 +178,7 @@ class BoardSearchList(generics.ListAPIView):
 
 
 class BoardList(generics.ListCreateAPIView):
-    queryset = Post.objects.all()
+    queryset = Post.objects.all().order_by('-id')
     serializer_class = PostSerializer
     parser_classes = (MultiPartParser,)
 
