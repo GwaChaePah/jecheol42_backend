@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from datetime import datetime
 from rest_framework.parsers import MultiPartParser
-from .models import Post, Comment, Product, OpenApi
+from .models import Post, Comment, Product, OpenApi, Profile
 from django.contrib.auth.models import User
 from django.db.models import Q
 from .serializers import ProductSerializer, BoardSerializer, PostDetailSerializer, PostSerializer, CommentSerializer, \
-    SearchSerializer, UserSerializer
+    SearchSerializer, UserSerializer, MyTokenObtainPairSerializer
 from rest_framework import generics, views, response, permissions, status
+from rest_framework_simplejwt.views import TokenObtainPairView
 from django.http import Http404
 from .forms import PostForm, CommentForm, LoginForm, RegisterForm
 from django.views.decorators.http import require_POST
@@ -317,10 +318,25 @@ def user_register(request):
         form = RegisterForm()
     return render(request, 'user_register.html', {'form': form})
 
-#
-# class TestView(views.APIView):
-#     permission_classes = (permissions.IsAuthenticated,)
-#
-#     def get(self, request):
-#         content = {'message': 'gwachaepah'}
-#         return response.Response(content)
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
+
+
+class PostCommentList(views.APIView):
+    def get_object(self, pk):
+        try:
+            return Post.objects.get(id=pk)
+        except Post.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk):
+        post = self.get_object(pk)
+        comments = Comment.objects.filter(post_key=post).order_by('id')
+        Detail = namedtuple('Detail', ('post', 'comments'))
+        detail = Detail(
+            post=post,
+            comments=comments,
+        )
+        serializer = PostDetailSerializer(detail)
+        return response.Response(serializer.data)
