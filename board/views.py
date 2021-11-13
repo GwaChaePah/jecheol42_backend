@@ -4,7 +4,8 @@ from rest_framework.parsers import MultiPartParser
 from .models import Post, Comment, Product, OpenApi
 from django.contrib.auth.models import User
 from django.db.models import Q
-from .serializers import ProductSerializer, BoardSerializer, PostDetailSerializer, PostSerializer, CommentSerializer, SearchSerializer
+from .serializers import ProductSerializer, BoardSerializer, PostDetailSerializer, PostSerializer, CommentSerializer, \
+    SearchSerializer, UserSerializer
 from rest_framework import generics, views, response, permissions, status
 from django.http import Http404
 from .forms import PostForm, CommentForm, LoginForm, RegisterForm
@@ -275,6 +276,19 @@ class SearchList(views.APIView):
         return response.Response(serializer.data)
 
 
+class UserCheck(generics.GenericAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def post(self, request):
+        request_name = request.data['username']
+        try:
+            user = User.objects.get(username=request_name)
+        except:
+            return response.Response(status=status.HTTP_202_ACCEPTED)
+        return response.Response(status=status.HTTP_401_UNAUTHORIZED)
+
+
 def user_login(request):
     username = request.POST['username']
     password = request.POST['password']
@@ -311,10 +325,10 @@ def user_register(request):
         form = RegisterForm()
     return render(request, 'user_register.html', {'form': form})
 
-
-class TestView(views.APIView):
-    permission_classes = (permissions.IsAuthenticated,)
-
-    def get(self, request):
-        content = {'message': 'gwachaepah'}
-        return response.Response(content)
+#
+# class TestView(views.APIView):
+#     permission_classes = (permissions.IsAuthenticated,)
+#
+#     def get(self, request):
+#         content = {'message': 'gwachaepah'}
+#         return response.Response(content)
