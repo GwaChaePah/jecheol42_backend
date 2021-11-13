@@ -223,10 +223,6 @@ class PostList(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PostSerializer
     parser_classes = (MultiPartParser,)
 
-    def update(self, request, *args, **kwargs):
-        kwargs['partial'] = True
-        return super().update(request, *args, **kwargs)
-
 
 class CommentList(generics.CreateAPIView):
     queryset = Comment.objects.all()
@@ -253,10 +249,6 @@ class CommentDetailList(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     # parser_classes = (MultiPartParser,)
-
-    def update(self, request, *args, **kwargs):
-        kwargs['partial'] = True
-        return super().update(request, *args, **kwargs)
 
 
 class SearchList(views.APIView):
