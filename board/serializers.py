@@ -1,5 +1,6 @@
-from .models import Product, Post, Comment, OpenApi
+from .models import Product, Post, Comment, OpenApi, Profile
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.models import User
 
 
@@ -95,5 +96,31 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
+            'pk',
             'username',
         ]
+        read_only_fields = [
+            'pk'
+        ]
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = [
+            'local'
+        ]
+
+
+# class UserGetSerializer(serializers.Serializer):
+#     user = UserSerializer()
+#     local = ProfileSerializer()
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['name'] = user.username
+        token['local'] = user.profile.local
+        return token

@@ -17,8 +17,9 @@ from django.contrib import admin
 from django.urls import path
 from board.views import main, board, show, search, new, create, edit, update, delete,\
     comment_create, comment_update, comment_delete,\
-    ProductList, BoardSearchList, BoardList, PostCommentList, PostList, CommentList, CommentDetailList, SearchList,\
-    user_login, user_logout, register, user_register, UserCheck
+    ProductList, BoardSearchList, BoardList, PostCommentList, PostList, CommentList, \
+    CommentDetailList, SearchList, user_login, user_logout, register, user_register, \
+    UserCheck, MyTokenObtainPairView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -79,6 +80,7 @@ urlpatterns = [
     path('user_check/', UserCheck.as_view()),
 
     # jwt
-    path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/verity/', jwt_views.TokenVerifyView.as_view(), name='token_verify')
 ]
