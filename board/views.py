@@ -19,7 +19,7 @@ from drf_yasg.utils import swagger_auto_schema
 from .models import Post, Comment, Product, OpenApi
 from .forms import PostForm, CommentForm, LoginForm, RegisterForm
 
-import serializers as ser
+from . import serializers as ser
 
 
 def main(request):
