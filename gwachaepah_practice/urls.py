@@ -80,6 +80,7 @@ urlpatterns = [
     path('user_register/', views.user_register, name="user_register"),
     # 여기 위까지
     path('user/api/check/', views.UserCheckView.as_view()),
+    path('user/api/register/', views.UserRegisterView.as_view()),
 
     # jwt
     path('token/api/', views.MyTokenObtainPairView.as_view(), name='token_obtain_pair'),

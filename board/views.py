@@ -332,3 +332,24 @@ def user_register(request):
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = ser.MyTokenObtainPairSerializer
+
+
+class UserRegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = ser.RegisterSerializer
+
+    def post(self, request, *args, **kwargs):
+        user = request.data["user"]
+        region = request.data["region"]
+        user_serializer = ser.UserInfoSerializer(data=user)
+        if user_serializer.is_valid():
+            user_obj = User.objects.create(
+                username=user["username"],
+            )
+            user_obj.set_password(user["password"])
+            user_obj.save()
+            user_obj.refresh_from_db()
+            user_obj.profile.region = region["region"]
+            user_obj.save()
+            return response.Response(user_serializer.data, status=status.HTTP_201_CREATED)
+        return response.Response(user_serializer.errors, status=status.HTTP_418_IM_A_TEAPOT)
