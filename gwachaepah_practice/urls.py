@@ -63,26 +63,27 @@ urlpatterns = [
     path('comment_delete/<int:comment_key>/', comment_delete, name="comment_delete"),
 
     # api
-    path('product-api/', ProductList.as_view()),
-    path('board-api', BoardSearchList.as_view()), # 쿼리 스트링 받아서 필터링
-    path('board-api/', BoardList.as_view()), # 전체 보드 데이터 + 페이지네이션 get
-    path('post-api/', PostCreateView.as_view()), # post POST
-    path('post-api/<int:pk>/', PostList.as_view()), # 특정 포스트의 put(+patch) delete
+    path('product/api/', ProductList.as_view()),
+    path('board/api', BoardSearchList.as_view()), # 쿼리 스트링 받아서 필터링
+    path('board/api/', BoardList.as_view()), # 전체 보드 데이터 + 페이지네이션 get
+    path('post/api/', PostCreateView.as_view()), # post POST
+    path('post/api/<int:pk>/', PostList.as_view()), # 특정 포스트의 get put(+patch) delete
     path('comment/api/list/<int:pk>/', CommentList.as_view()), # 특정 post(pk)의 comments GET
-    path('comment-api/', CommentCreateView.as_view()), # 특정 포스트 pk 에 comment POST
-    # 특정 post의 모든 comment를 보고 싶은 api
-    path('comment-api/<int:pk>/', CommentDetailList.as_view()), # 특정 comment pk 의 comment put get delete
-    path('search-api', SearchList.as_view()),
+    path('comment/api/', CommentCreateView.as_view()), # 특정 포스트 pk 에 comment POST
+    path('comment/api/detail/<int:pk>/', CommentDetailList.as_view()), # 특정 comment pk 의 comment put get delete
+    path('search/api', SearchList.as_view()),
 
     # user
+    # 나중에 지울 부분
     path('user_login/', user_login, name="user_login"),
     path('user_logout/', user_logout, name="user_logout"),
     path('register/', register, name="register"),
     path('user_register/', user_register, name="user_register"),
-    path('user_check/', UserCheck.as_view()),
+    # 여기 위까지
+    path('user/api/check/', UserCheck.as_view()),
 
     # jwt
-    path('api/token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/token/verity/', jwt_views.TokenVerifyView.as_view(), name='token_verify')
+    path('token/api/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/api/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+    path('token/api/verity/', jwt_views.TokenVerifyView.as_view(), name='token_verify')
 ]
