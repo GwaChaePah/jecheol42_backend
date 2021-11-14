@@ -184,7 +184,10 @@ class BoardList(generics.ListAPIView):
     serializer_class = BoardSerializer
 
 
-class PostCommentList(views.APIView):
+class CommentList(generics.ListAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
     def get_object(self, pk):
         try:
             return Post.objects.get(id=pk)
@@ -194,12 +197,7 @@ class PostCommentList(views.APIView):
     def get(self, request, pk):
         post = self.get_object(pk)
         comments = Comment.objects.filter(post_key=post).order_by('id')
-        Detail = namedtuple('Detail', ('post', 'comments'))
-        detail = Detail(
-            post=post,
-            comments=comments,
-        )
-        serializer = PostDetailSerializer(detail)
+        serializer = CommentSerializer(comments, many=True)
         return response.Response(serializer.data)
 
 
@@ -230,7 +228,7 @@ class PostCreateView(generics.CreateAPIView):
     # 나중에 여기 위에 까지 지우기
 
 
-class CommentList(generics.CreateAPIView):
+class CommentCreateView(generics.CreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentCreateSerializer
 
@@ -326,22 +324,3 @@ def user_register(request):
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
-
-
-class PostCommentList(views.APIView):
-    def get_object(self, pk):
-        try:
-            return Post.objects.get(id=pk)
-        except Post.DoesNotExist:
-            raise Http404
-
-    def get(self, request, pk):
-        post = self.get_object(pk)
-        comments = Comment.objects.filter(post_key=post).order_by('id')
-        Detail = namedtuple('Detail', ('post', 'comments'))
-        detail = Detail(
-            post=post,
-            comments=comments,
-        )
-        serializer = PostDetailSerializer(detail)
-        return response.Response(serializer.data)
