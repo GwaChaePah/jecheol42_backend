@@ -322,7 +322,7 @@ def user_register(request):
         if form.is_valid():
             user = form.save()
             user.refresh_from_db()  # load the profile instance created by the signal
-            user.profile.local = form.cleaned_data.get('local')
+            user.profile.region = form.cleaned_data.get('region')
             user.save()
             return redirect('main')
     else:

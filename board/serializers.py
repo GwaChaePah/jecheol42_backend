@@ -121,13 +121,13 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = [
-            'local'
+            'region'
         ]
 
 
 # class UserGetSerializer(serializers.Serializer):
 #     user = UserSerializer()
-#     local = ProfileSerializer()
+#     region = ProfileSerializer()
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -135,5 +135,5 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         data = super().validate(attrs)
         data['pk'] = self.user.pk
         data['username'] = self.user.username
-        data['local'] = self.user.profile.local
+        data['region'] = self.user.profile.region
         return data
