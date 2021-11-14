@@ -13,7 +13,7 @@ class Profile(models.Model):
         on_delete=models.CASCADE,
         primary_key=True
     )
-    local = models.PositiveIntegerField(default=0)
+    region = models.PositiveIntegerField(default=0)
 
 
 @receiver(post_save, sender=User)

@@ -74,8 +74,8 @@ class OpenApiAdmin(admin.ModelAdmin):
 class ProfileAdmin(admin.ModelAdmin):
     list_display = (
         'user_key',
-        'local',
+        'region',
     )
     search_fields = (
-        'local',
+        'region',
     )
