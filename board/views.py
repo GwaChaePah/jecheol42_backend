@@ -168,13 +168,19 @@ class BoardSearchList(generics.ListAPIView):
         try:
             tag_type = request.GET['tag']
         except:
-            return search_res
+            return search_res.exclude(tag=2)
         return search_res.filter(tag=tag_type)
 
     @swagger_auto_schema(manual_parameters=[search_param, tag_param])
     def get(self, request, *args, **kwargs):
         search_res = self.get_search(request)
         result = self.get_tag(request, search_res)
+        page = self.paginate_queryset(result)
+
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
         serializer = BoardSerializer(result, many=True)
         return response.Response(serializer.data)
 
