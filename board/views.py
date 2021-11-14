@@ -4,8 +4,8 @@ from rest_framework.parsers import MultiPartParser
 from .models import Post, Comment, Product, OpenApi, Profile
 from django.contrib.auth.models import User
 from django.db.models import Q
-from .serializers import ProductSerializer, BoardSerializer, PostDetailSerializer, PostSerializer, CommentSerializer, \
-    SearchSerializer, UserSerializer, MyTokenObtainPairSerializer
+from .serializers import ProductSerializer, BoardSerializer, PostDetailSerializer, PostSerializer, PostCreateSerializer, \
+    CommentSerializer, CommentCreateSerializer, SearchSerializer, UserSerializer, MyTokenObtainPairSerializer
 from rest_framework import generics, views, response, permissions, status
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.http import Http404
@@ -179,25 +179,9 @@ class BoardSearchList(generics.ListAPIView):
         return response.Response(serializer.data)
 
 
-class BoardList(generics.ListCreateAPIView):
-    queryset = Post.objects.all().order_by('-id')
-    serializer_class = PostSerializer
-    parser_classes = (MultiPartParser,)
-
-    # 임시로 프론트가 새글쓰기 가능하도록 임의의 유저를 넣어준다
-    def post(self, request):
-        try:
-            user = User.objects.get(pk=request.data["user_key"])
-        except:
-            pks = User.objects.values_list('pk', flat=True)
-            user = User.objects.get(pk=choice(pks))
-        request.data["user_key"] = user.pk
-        serializer = PostSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return response.Response(serializer.data, status=status.HTTP_201_CREATED)
-        return response.Response(serializer.errors, status=status.HTTP_418_IM_A_TEAPOT)
-    # 나중에 여기 위에 까지 지우기
+class BoardList(generics.ListAPIView):
+    queryset = Post.objects.all().exclude(tag=2).order_by('-id')
+    serializer_class = BoardSerializer
 
 
 class PostCommentList(views.APIView):
@@ -225,9 +209,30 @@ class PostList(generics.RetrieveUpdateDestroyAPIView):
     parser_classes = (MultiPartParser,)
 
 
+class PostCreateView(generics.CreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostCreateSerializer
+    parser_classes = (MultiPartParser,)
+
+    # 임시로 프론트가 새글쓰기 가능하도록 임의의 유저를 넣어준다
+    # def post(self, request, *args, **kwargs):
+    #     try:
+    #         user = User.objects.get(pk=request.data["user_key"])
+    #     except:
+    #         pks = User.objects.values_list('pk', flat=True)
+    #         user = User.objects.get(pk=choice(pks))
+    #     request.data["user_key"] = user.pk
+    #     serializer = PostCreateSerializer(data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return response.Response(serializer.data, status=status.HTTP_201_CREATED)
+    #     return response.Response(serializer.errors, status=status.HTTP_418_IM_A_TEAPOT)
+    # 나중에 여기 위에 까지 지우기
+
+
 class CommentList(generics.CreateAPIView):
     queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
+    serializer_class = CommentCreateSerializer
 
     # 임시로 프론트가 새글쓰기 가능하도록 임의의 유저를 넣어준다
     def post(self, request):
@@ -238,7 +243,7 @@ class CommentList(generics.CreateAPIView):
             user = User.objects.get(pk=choice(pks))
         request.data["user_key"] = user.pk
 
-        serializer = CommentSerializer(data=request.data)
+        serializer = CommentCreateSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return response.Response(serializer.data, status=status.HTTP_201_CREATED)

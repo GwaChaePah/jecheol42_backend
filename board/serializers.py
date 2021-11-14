@@ -58,6 +58,12 @@ class PostSerializer(serializers.ModelSerializer):
         ]
 
 
+class PostCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = '__all__'
+
+
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
@@ -69,6 +75,12 @@ class CommentSerializer(serializers.ModelSerializer):
             'post_key',
             'user_key',
         ]
+
+
+class CommentCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = '__all__'
 
 
 class PostDetailSerializer(serializers.Serializer):
