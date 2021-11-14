@@ -1,22 +1,25 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from random import choice
 from datetime import datetime
-from rest_framework.parsers import MultiPartParser
-from .models import Post, Comment, Product, OpenApi, Profile
-from django.contrib.auth.models import User
+
 from django.db.models import Q
-from .serializers import ProductSerializer, BoardSerializer, PostDetailSerializer, PostSerializer, PostCreateSerializer, \
-    CommentSerializer, CommentCreateSerializer, SearchSerializer, UserSerializer, MyTokenObtainPairSerializer
-from rest_framework import generics, views, response, permissions, status
-from rest_framework_simplejwt.views import TokenObtainPairView
 from django.http import Http404
-from .forms import PostForm, CommentForm, LoginForm, RegisterForm
 from django.views.decorators.http import require_POST
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
+
+from rest_framework import generics, views, response, status
+from rest_framework.parsers import MultiPartParser
+from rest_framework_simplejwt.views import TokenObtainPairView
+
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from django.contrib.auth import authenticate, login, logout, models
-from django.contrib.auth.decorators import login_required
-from collections import namedtuple
-from random import choice
+
+from .models import Post, Comment, Product, OpenApi
+from .forms import PostForm, CommentForm, LoginForm, RegisterForm
+
+import serializers as ser
 
 
 def main(request):
@@ -136,12 +139,12 @@ def comment_delete(request, comment_key):
 class ProductList(generics.ListAPIView):
     month = datetime.now().month
     queryset = Product.objects.filter(month__contains=[month]).order_by("?")[:4]
-    serializer_class = ProductSerializer
+    serializer_class = ser.ProductSerializer
 
 
 class BoardSearchList(generics.ListAPIView):
     queryset = Post.objects.all()
-    serializer_class = BoardSerializer
+    serializer_class = ser.BoardSerializer
 
     search_param = openapi.Parameter(
         'search',
@@ -181,18 +184,18 @@ class BoardSearchList(generics.ListAPIView):
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
-        serializer = BoardSerializer(result, many=True)
+        serializer = ser.BoardSerializer(result, many=True)
         return response.Response(serializer.data)
 
 
 class BoardList(generics.ListAPIView):
     queryset = Post.objects.all().exclude(tag=2).order_by('-id')
-    serializer_class = BoardSerializer
+    serializer_class = ser.BoardSerializer
 
 
 class CommentList(generics.ListAPIView):
     queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
+    serializer_class = ser.CommentSerializer
 
     def get_object(self, pk):
         try:
@@ -203,19 +206,19 @@ class CommentList(generics.ListAPIView):
     def get(self, request, pk):
         post = self.get_object(pk)
         comments = Comment.objects.filter(post_key=post).order_by('id')
-        serializer = CommentSerializer(comments, many=True)
+        serializer = ser.CommentSerializer(comments, many=True)
         return response.Response(serializer.data)
 
 
-class PostList(generics.RetrieveUpdateDestroyAPIView):
+class PostDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
-    serializer_class = PostSerializer
+    serializer_class = ser.PostSerializer
     parser_classes = (MultiPartParser,)
 
 
 class PostCreateView(generics.CreateAPIView):
     queryset = Post.objects.all()
-    serializer_class = PostCreateSerializer
+    serializer_class = ser.PostCreateSerializer
     parser_classes = (MultiPartParser,)
 
     # 임시로 프론트가 새글쓰기 가능하도록 임의의 유저를 넣어준다
@@ -236,7 +239,7 @@ class PostCreateView(generics.CreateAPIView):
 
 class CommentCreateView(generics.CreateAPIView):
     queryset = Comment.objects.all()
-    serializer_class = CommentCreateSerializer
+    serializer_class = ser.CommentCreateSerializer
 
     # 임시로 프론트가 새글쓰기 가능하도록 임의의 유저를 넣어준다
     def post(self, request):
@@ -247,7 +250,7 @@ class CommentCreateView(generics.CreateAPIView):
             user = User.objects.get(pk=choice(pks))
         request.data["user_key"] = user.pk
 
-        serializer = CommentCreateSerializer(data=request.data)
+        serializer = ser.CommentCreateSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return response.Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -255,10 +258,9 @@ class CommentCreateView(generics.CreateAPIView):
         # 나중에 여기 위에 까지 지우기
 
 
-class CommentDetailList(generics.RetrieveUpdateDestroyAPIView):
+class CommentDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
-    # parser_classes = (MultiPartParser,)
+    serializer_class = ser.CommentSerializer
 
 
 class SearchList(views.APIView):
@@ -274,13 +276,13 @@ class SearchList(views.APIView):
         search_text = request.GET['search']
         search_res = OpenApi.objects.filter(Q(item_name=search_text) | Q(kind_name__startswith=search_text))
         result = search_res.exclude(price="-").order_by('-id')
-        serializer = SearchSerializer(result, many=True)
+        serializer = ser.SearchSerializer(result, many=True)
         return response.Response(serializer.data)
 
 
-class UserCheck(generics.GenericAPIView):
+class UserCheckView(generics.GenericAPIView):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = ser.UserSerializer
 
     def post(self, request):
         request_name = request.data['username']
@@ -329,4 +331,4 @@ def user_register(request):
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
-    serializer_class = MyTokenObtainPairSerializer
+    serializer_class = ser.MyTokenObtainPairSerializer
