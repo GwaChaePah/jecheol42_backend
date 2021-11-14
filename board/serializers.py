@@ -1,7 +1,8 @@
 from .models import Product, Post, Comment, OpenApi, Profile
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from django.contrib.auth.models import User
+from rest_framework_simplejwt.settings import api_settings
+from django.contrib.auth.models import User, update_last_login
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -130,9 +131,9 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    @classmethod
-    def get_token(cls, user):
-        token = super().get_token(user)
-        token['name'] = user.username
-        token['local'] = user.profile.local
-        return token
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        data['pk'] = self.user.pk
+        data['username'] = self.user.username
+        data['local'] = self.user.profile.local
+        return data
