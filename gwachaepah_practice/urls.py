@@ -15,16 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from board.views import main, board, show, search, new, create, edit, update, delete,\
-    comment_create, comment_update, comment_delete,\
-    ProductList, BoardSearchList, BoardList, CommentList, PostList, CommentCreateView, \
-    CommentDetailList, SearchList, user_login, user_logout, register, user_register, \
-    UserCheck, MyTokenObtainPairView, PostCreateView
+from django.conf.urls import url
+
+from board import views
+
 from rest_framework import permissions
+from rest_framework_simplejwt import views as jwt_views
+
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from django.conf.urls import url
-from rest_framework_simplejwt import views as jwt_views
 
 
 schema_view = get_schema_view(
@@ -49,41 +48,41 @@ urlpatterns = [
 
     # jecheol-42
     path('admin/', admin.site.urls),
-    path('', main, name="main"),
-    path('board/', board, name="board"),
-    path('show/<int:post_key>', show, name="show"),
-    path('search/', search, name="search"),
-    path('new/', new, name="new"),
-    path('create/', create, name="create"),
-    path('edit/<int:post_key>', edit, name="edit"),
-    path('update/<int:post_key>', update, name="update"),
-    path('delete/<int:post_key>', delete, name="delete"),
-    path('comment_create/<int:post_key>/', comment_create, name="comment_create"),
-    path('comment_update/<int:comment_key>/', comment_update, name="comment_update"),
-    path('comment_delete/<int:comment_key>/', comment_delete, name="comment_delete"),
+    path('', views.main, name="main"),
+    path('board/', views.board, name="board"),
+    path('show/<int:post_key>', views.show, name="show"),
+    path('search/', views.search, name="search"),
+    path('new/', views.new, name="new"),
+    path('create/', views.create, name="create"),
+    path('edit/<int:post_key>', views.edit, name="edit"),
+    path('update/<int:post_key>', views.update, name="update"),
+    path('delete/<int:post_key>', views.delete, name="delete"),
+    path('comment_create/<int:post_key>/', views.comment_create, name="comment_create"),
+    path('comment_update/<int:comment_key>/', views.comment_update, name="comment_update"),
+    path('comment_delete/<int:comment_key>/', views.comment_delete, name="comment_delete"),
 
     # api
-    path('product/api/', ProductList.as_view()),
-    path('board/api', BoardSearchList.as_view()), # 쿼리 스트링 받아서 필터링
-    path('board/api/', BoardList.as_view()), # 전체 보드 데이터 + 페이지네이션 get
-    path('post/api/', PostCreateView.as_view()), # post POST
-    path('post/api/<int:pk>/', PostList.as_view()), # 특정 포스트의 get put(+patch) delete
-    path('comment/api/list/<int:pk>/', CommentList.as_view()), # 특정 post(pk)의 comments GET
-    path('comment/api/', CommentCreateView.as_view()), # 특정 포스트 pk 에 comment POST
-    path('comment/api/detail/<int:pk>/', CommentDetailList.as_view()), # 특정 comment pk 의 comment put get delete
-    path('search/api', SearchList.as_view()),
+    path('product/api/', views.ProductList.as_view()),
+    path('board/api', views.BoardSearchList.as_view()), # 쿼리 스트링 받아서 필터링
+    path('board/api/', views.BoardList.as_view()), # 전체 보드 데이터 + 페이지네이션 get
+    path('post/api/', views.PostCreateView.as_view()), # post POST
+    path('post/api/<int:pk>/', views.PostDetailView.as_view()), # 특정 포스트의 get put(+patch) delete
+    path('comment/api/list/<int:pk>/', views.CommentList.as_view()), # 특정 post(pk)의 comments GET
+    path('comment/api/', views.CommentCreateView.as_view()), # 특정 포스트 pk 에 comment POST
+    path('comment/api/detail/<int:pk>/', views.CommentDetailView.as_view()), # 특정 comment pk 의 comment put get delete
+    path('search/api', views.SearchList.as_view()),
 
     # user
     # 나중에 지울 부분
-    path('user_login/', user_login, name="user_login"),
-    path('user_logout/', user_logout, name="user_logout"),
-    path('register/', register, name="register"),
-    path('user_register/', user_register, name="user_register"),
+    path('user_login/', views.user_login, name="user_login"),
+    path('user_logout/', views.user_logout, name="user_logout"),
+    path('register/', views.register, name="register"),
+    path('user_register/', views.user_register, name="user_register"),
     # 여기 위까지
-    path('user/api/check/', UserCheck.as_view()),
+    path('user/api/check/', views.UserCheckView.as_view()),
 
     # jwt
-    path('token/api/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/api/', views.MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/api/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     path('token/api/verity/', jwt_views.TokenVerifyView.as_view(), name='token_verify')
 ]
