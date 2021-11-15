@@ -146,10 +146,6 @@ class ProductList(generics.ListAPIView):
 class BoardSearchList(generics.ListAPIView):
     queryset = Post.objects.all()
     serializer_class = ser.BoardSerializer
-    permission_classes = [
-        permissions.IsAuthenticatedOrReadOnly,
-        IsOwnerOrReadOnly
-    ]
 
     search_param = openapi.Parameter(
         'search',
