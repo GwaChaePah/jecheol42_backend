@@ -63,15 +63,6 @@ class BoardSerializer(serializers.ModelSerializer):
         ]
 
 
-class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    def validate(self, attrs):
-        data = super().validate(attrs)
-        data['pk'] = self.user.pk
-        data['username'] = self.user.username
-        data['region'] = self.user.profile.region
-        return data
-
-
 class PostSerializer(serializers.ModelSerializer):
     comment_cnt = serializers.SerializerMethodField()
     username = serializers.SerializerMethodField()
