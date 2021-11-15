@@ -99,7 +99,7 @@ class PostCreateSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    username = serializers.SerializerMethodField
+    username = serializers.SerializerMethodField()
 
     def get_username(self, obj):
         user = obj.user_key
