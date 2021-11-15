@@ -21,6 +21,20 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class BoardSerializer(serializers.ModelSerializer):
+    comment_cnt = serializers.SerializerMethodField()
+    username = serializers.SerializerMethodField()
+
+    def get_comment_cnt(self, obj):
+        pk = obj.id
+        queryset = Comment.objects.filter(post_key=pk)
+        comment_cnt = len(queryset)
+        return comment_cnt
+
+    def get_username(self, obj):
+        user = obj.user_key
+        username = user.username
+        return username
+
     class Meta:
         model = Post
         fields = [
@@ -32,6 +46,8 @@ class BoardSerializer(serializers.ModelSerializer):
             'tag',
             'price',
             'user_key',
+            'username',
+            'comment_cnt',
         ]
         read_only_fields = [
             'id',
@@ -42,10 +58,26 @@ class BoardSerializer(serializers.ModelSerializer):
             'tag',
             'price',
             'user_key',
+            'username',
+            'comment_cnt',
         ]
 
 
 class PostSerializer(serializers.ModelSerializer):
+    comment_cnt = serializers.SerializerMethodField()
+    username = serializers.SerializerMethodField()
+
+    def get_comment_cnt(self, obj):
+        pk = obj.id
+        queryset = Comment.objects.filter(post_key=pk)
+        comment_cnt = len(queryset)
+        return comment_cnt
+
+    def get_username(self, obj):
+        user = obj.user_key
+        username = user.username
+        return username
+
     class Meta:
         model = Post
         fields = '__all__'
@@ -55,6 +87,8 @@ class PostSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
             'user_key',
+            'username',
+            'comment_cnt',
         ]
 
 

@@ -188,11 +188,6 @@ class BoardSearchList(generics.ListAPIView):
         return response.Response(serializer.data)
 
 
-class BoardList(generics.ListAPIView):
-    queryset = Post.objects.all().exclude(tag=2).order_by('-id')
-    serializer_class = ser.BoardSerializer
-
-
 class CommentList(generics.ListAPIView):
     queryset = Comment.objects.all()
     serializer_class = ser.CommentSerializer
@@ -221,41 +216,10 @@ class PostCreateView(generics.CreateAPIView):
     serializer_class = ser.PostCreateSerializer
     parser_classes = (MultiPartParser,)
 
-    # 임시로 프론트가 새글쓰기 가능하도록 임의의 유저를 넣어준다
-    # def post(self, request, *args, **kwargs):
-    #     try:
-    #         user = User.objects.get(pk=request.data["user_key"])
-    #     except:
-    #         pks = User.objects.values_list('pk', flat=True)
-    #         user = User.objects.get(pk=choice(pks))
-    #     request.data["user_key"] = user.pk
-    #     serializer = PostCreateSerializer(data=request.data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return response.Response(serializer.data, status=status.HTTP_201_CREATED)
-    #     return response.Response(serializer.errors, status=status.HTTP_418_IM_A_TEAPOT)
-    # 나중에 여기 위에 까지 지우기
-
 
 class CommentCreateView(generics.CreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = ser.CommentCreateSerializer
-
-    # 임시로 프론트가 새글쓰기 가능하도록 임의의 유저를 넣어준다
-    def post(self, request):
-        try:
-            user = User.objects.get(pk=request.data["user_key"])
-        except:
-            pks = User.objects.values_list('pk', flat=True)
-            user = User.objects.get(pk=choice(pks))
-        request.data["user_key"] = user.pk
-
-        serializer = ser.CommentCreateSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return response.Response(serializer.data, status=status.HTTP_201_CREATED)
-        return response.Response(serializer.errors, status=status.HTTP_418_IM_A_TEAPOT)
-        # 나중에 여기 위에 까지 지우기
 
 
 class CommentDetailView(generics.RetrieveUpdateDestroyAPIView):

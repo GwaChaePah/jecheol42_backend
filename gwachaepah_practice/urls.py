@@ -64,7 +64,6 @@ urlpatterns = [
     # api
     path('product/api/', views.ProductList.as_view()),
     path('board/api', views.BoardSearchList.as_view()), # 쿼리 스트링 받아서 필터링
-    path('board/api/', views.BoardList.as_view()), # 전체 보드 데이터 + 페이지네이션 get
     path('post/api/', views.PostCreateView.as_view()), # post POST
     path('post/api/<int:pk>/', views.PostDetailView.as_view()), # 특정 포스트의 get put(+patch) delete
     path('comment/api/list/<int:pk>/', views.CommentList.as_view()), # 특정 post(pk)의 comments GET
