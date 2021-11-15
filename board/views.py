@@ -185,7 +185,6 @@ class BoardSearchList(generics.ListAPIView):
             return self.get_paginated_response(serializer.data)
 
         serializer = ser.BoardSerializer(result, many=True)
-        print(serializer.data)
         return response.Response(serializer.data)
 
 
