@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 
-from rest_framework import generics, views, response, status, permissions
+from rest_framework import generics, views, response, status
 from rest_framework.parsers import MultiPartParser
 from rest_framework_simplejwt.views import TokenObtainPairView
 
@@ -20,7 +20,6 @@ from .models import Post, Comment, Product, OpenApi
 from .forms import PostForm, CommentForm, LoginForm, RegisterForm
 
 from . import serializers as ser
-from .permissions import IsOwnerOrReadOnly
 
 
 def main(request):
