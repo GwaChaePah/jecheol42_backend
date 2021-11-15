@@ -85,5 +85,5 @@ urlpatterns = [
     # jwt
     path('token/api/', views.MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/api/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
-    path('token/api/verity/', jwt_views.TokenVerifyView.as_view(), name='token_verify')
+    path('token/api/verify/', jwt_views.TokenVerifyView.as_view(), name='token_verify')
 ]
