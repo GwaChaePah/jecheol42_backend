@@ -99,6 +99,13 @@ class PostCreateSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    username = serializers.SerializerMethodField
+
+    def get_username(self, obj):
+        user = obj.user_key
+        username = user.username
+        return username
+
     class Meta:
         model = Comment
         fields = '__all__'
@@ -108,6 +115,7 @@ class CommentSerializer(serializers.ModelSerializer):
             'updated_at',
             'post_key',
             'user_key',
+            'username'
         ]
 
 
