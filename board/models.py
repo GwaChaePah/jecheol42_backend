@@ -42,7 +42,7 @@ class Post(models.Model):
 
     title = models.CharField(max_length=100)
     content = models.TextField()
-    image1 = models.ImageField(upload_to=post_directory_path, blank=True, null=True)
+    image1 = models.ImageField(upload_to=post_directory_path)
     image2 = models.ImageField(upload_to=post_directory_path, blank=True, null=True)
     image3 = models.ImageField(upload_to=post_directory_path, blank=True, null=True)
     view_count = models.PositiveIntegerField(default=0)
