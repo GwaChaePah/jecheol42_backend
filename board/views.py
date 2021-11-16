@@ -253,8 +253,8 @@ class SearchList(views.APIView):
             queryset = OpenApi.objects.filter(kind_name__startswith=search_text)
         if not len(queryset):
             queryset = OpenApi.objects.filter(kind_name__contains=search_text)
-        queryset.exclude(price="-").order_by('-id')
-        serializer = ser.SearchSerializer(queryset, many=True)
+        result = queryset.exclude(price="-").order_by('-id')
+        serializer = ser.SearchSerializer(result, many=True)
         return response.Response(serializer.data)
 
 
