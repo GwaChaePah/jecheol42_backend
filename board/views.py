@@ -210,6 +210,13 @@ class PostDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ser.PostSerializer
     parser_classes = (MultiPartParser,)
 
+    def get(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.view_count += 1
+        instance.save()
+        serializer = self.get_serializer(instance)
+        return response.Response(serializer.data)
+
 
 class PostCreateView(generics.CreateAPIView):
     queryset = Post.objects.all()
