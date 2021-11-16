@@ -16,13 +16,6 @@ class Profile(models.Model):
     region = models.PositiveIntegerField(default=0)
 
 
-@receiver(post_save, sender=User)
-def update_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user_key=instance)
-    instance.profile.save()
-
-
 class AutoDateTimeField(models.DateTimeField):
     def pre_save(self, model_instance, add):
         return timezone.now()
