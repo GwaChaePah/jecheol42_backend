@@ -16,7 +16,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 
-from .models import Post, Comment, Product, OpenApi
+from .models import Post, Comment, Product, OpenApi, Profile
 from .forms import PostForm, CommentForm, LoginForm, RegisterForm
 
 from . import serializers as ser
@@ -316,6 +316,11 @@ class UserRegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = ser.RegisterSerializer
 
+    def set_profile(self, user_obj, region):
+        profile = Profile.objects.create(user_key=user_obj)
+        profile.region = region["region"]
+        profile.save()
+
     def post(self, request, *args, **kwargs):
         user = request.data["user"]
         region = request.data["region"]
@@ -326,8 +331,6 @@ class UserRegisterView(generics.CreateAPIView):
             )
             user_obj.set_password(user["password"])
             user_obj.save()
-            user_obj.refresh_from_db()
-            user_obj.profile.region = region["region"]
-            user_obj.save()
+            self.set_profile(user_obj, region)
             return response.Response(user_serializer.data, status=status.HTTP_201_CREATED)
         return response.Response(user_serializer.errors, status=status.HTTP_418_IM_A_TEAPOT)
