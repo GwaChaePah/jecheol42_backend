@@ -178,11 +178,13 @@ class BoardSearchList(generics.ListAPIView):
     @swagger_auto_schema(manual_parameters=[search_param, tag_param])
     def get(self, request, *args, **kwargs):
         try:
-            referer = request.META['HTTP_REFERER']
+            origin = request.META['HTTP_REFERER']
         except:
-            return response.Response(status=status.HTTP_401_UNAUTHORIZED)
-        if referer is not "https://jecheol42.herokuapp.com/":
-            return response.Response(status=status.HTTP_401_UNAUTHORIZED)
+            return response.Response(status=status.HTTP_403_FORBIDDEN)
+        front = "https://jecheol42.herokuapp.com/"
+        local = "http://127.0.0.1:8000/swagger/"
+        if (origin != front) and (origin != local):
+                return response.Response(status=status.HTTP_418_IM_A_TEAPOT)
         self.permission_classes = [permissions.IsAuthenticated]
 
         search_res = self.get_search(request)
