@@ -182,10 +182,10 @@ class BoardSearchList(generics.ListAPIView):
         except:
             return response.Response(status=status.HTTP_403_FORBIDDEN)
         front = "https://jecheol42.herokuapp.com/"
+        swagger = "https://jecheol-42.herokuapp.com/swagger/"
         local = "http://127.0.0.1:8000/swagger/"
-        if (origin != front) and (origin != local):
-                return response.Response(status=status.HTTP_418_IM_A_TEAPOT)
-        self.permission_classes = [permissions.IsAuthenticated]
+        if not ((origin == front) or (origin == swagger) or (origin == local)):
+            return response.Response(status=status.HTTP_418_IM_A_TEAPOT)
 
         search_res = self.get_search(request)
         result = self.get_tag(request, search_res)
