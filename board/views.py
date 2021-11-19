@@ -175,18 +175,21 @@ class BoardSearchList(generics.ListAPIView):
             return search_res.exclude(tag=2)
         return search_res.filter(tag=tag_type)
 
+    def get_permissions(self):
+        try:
+            origin = self.request.META['HTTP_REFERER']
+        except:
+            permission_classes = [permissions.IsAdminUser,]
+        else:
+            front = "https://jecheol42.herokuapp.com/"
+            if (origin == front):
+                permission_classes = [permissions.AllowAny]
+            else:
+                permission_classes = [permissions.IsAdminUser, ]
+        return [permission() for permission in permission_classes]
+
     @swagger_auto_schema(manual_parameters=[search_param, tag_param])
     def get(self, request, *args, **kwargs):
-        try:
-            origin = request.META['HTTP_REFERER']
-        except:
-            return response.Response(status=status.HTTP_403_FORBIDDEN)
-        front = "https://jecheol42.herokuapp.com/"
-        swagger = "https://jecheol-42.herokuapp.com/swagger/"
-        local = "http://127.0.0.1:8000/swagger/"
-        if not ((origin == front) or (origin == swagger) or (origin == local)):
-            return response.Response(status=status.HTTP_418_IM_A_TEAPOT)
-
         search_res = self.get_search(request)
         result = self.get_tag(request, search_res)
         page = self.paginate_queryset(result)
