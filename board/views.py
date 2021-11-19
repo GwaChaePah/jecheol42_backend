@@ -1,6 +1,7 @@
 from random import choice
 from datetime import datetime
 
+import requests
 from django.db.models import Q
 from django.http import Http404
 from django.views.decorators.http import require_POST
@@ -145,7 +146,6 @@ class ProductList(generics.ListAPIView):
 class BoardSearchList(generics.ListAPIView):
     queryset = Post.objects.all()
     serializer_class = ser.BoardSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
     search_param = openapi.Parameter(
         'search',
@@ -177,6 +177,14 @@ class BoardSearchList(generics.ListAPIView):
 
     @swagger_auto_schema(manual_parameters=[search_param, tag_param])
     def get(self, request, *args, **kwargs):
+        try:
+            referer = request.META['HTTP_REFERER']
+        except:
+            return response.Response(status=status.HTTP_401_UNAUTHORIZED)
+        if referer is not "https://jecheol42.herokuapp.com/":
+            return response.Response(status=status.HTTP_401_UNAUTHORIZED)
+        self.permission_classes = [permissions.IsAuthenticated]
+
         search_res = self.get_search(request)
         result = self.get_tag(request, search_res)
         page = self.paginate_queryset(result)
