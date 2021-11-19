@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 
-from rest_framework import generics, views, response, status
+from rest_framework import generics, views, response, status, permissions
 from rest_framework.parsers import MultiPartParser
 from rest_framework_simplejwt.views import TokenObtainPairView
 
@@ -145,6 +145,7 @@ class ProductList(generics.ListAPIView):
 class BoardSearchList(generics.ListAPIView):
     queryset = Post.objects.all()
     serializer_class = ser.BoardSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     search_param = openapi.Parameter(
         'search',
