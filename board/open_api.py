@@ -15,7 +15,6 @@ def call_open_api(date, category):
         'p_returntype': "json"
     }
     api_res = requests.get(url, params=query_params)
-    print(api_res.url)
     return api_res.json()
 
 
@@ -24,7 +23,6 @@ def put_data_to_api_table(date, category):
     try:
         items = json_res['data']['item']
     except:
-        print("error\n")
         return
     open_api_list = [
         OpenApi(
