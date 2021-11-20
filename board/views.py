@@ -137,10 +137,28 @@ def comment_delete(request, comment_key):
     return redirect('show', comment.post_key.pk)
 
 
+def set_permissions(self):
+    try:
+        origin = self.request.META['HTTP_REFERER']
+    except:
+        permission_classes = [permissions.IsAdminUser,]
+    else:
+        front = "https://jecheol42.herokuapp.com/"
+        local = "http://127.0.0.1:8080/"
+        if (origin == front) or (origin == local):
+            permission_classes = [permissions.AllowAny]
+        else:
+            permission_classes = [permissions.IsAdminUser, ]
+    return [permission() for permission in permission_classes]
+
+
 class ProductList(generics.ListAPIView):
     month = datetime.now().month
     queryset = Product.objects.filter(month__contains=[month]).order_by("?")[:4]
     serializer_class = ser.ProductSerializer
+
+    def get_permissions(self):
+        return set_permissions(self)
 
 
 class BoardSearchList(generics.ListAPIView):
@@ -176,18 +194,7 @@ class BoardSearchList(generics.ListAPIView):
         return search_res.filter(tag=tag_type)
 
     def get_permissions(self):
-        try:
-            origin = self.request.META['HTTP_REFERER']
-        except:
-            permission_classes = [permissions.IsAdminUser,]
-        else:
-            front = "https://jecheol42.herokuapp.com/"
-            local = "http://127.0.0.1:8080/"
-            if (origin == front) or (origin == local):
-                permission_classes = [permissions.AllowAny]
-            else:
-                permission_classes = [permissions.IsAdminUser, ]
-        return [permission() for permission in permission_classes]
+        return set_permissions(self)
 
     @swagger_auto_schema(manual_parameters=[search_param, tag_param])
     def get(self, request, *args, **kwargs):
@@ -219,6 +226,9 @@ class CommentList(generics.ListAPIView):
         serializer = ser.CommentSerializer(comments, many=True)
         return response.Response(serializer.data)
 
+    def get_permissions(self):
+        return set_permissions(self)
+
 
 class PostDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
@@ -232,21 +242,33 @@ class PostDetailView(generics.RetrieveUpdateDestroyAPIView):
         serializer = self.get_serializer(instance)
         return response.Response(serializer.data)
 
+    def get_permissions(self):
+        return set_permissions(self)
+
 
 class PostCreateView(generics.CreateAPIView):
     queryset = Post.objects.all()
     serializer_class = ser.PostCreateSerializer
     parser_classes = (MultiPartParser,)
 
+    def get_permissions(self):
+        return set_permissions(self)
+
 
 class CommentCreateView(generics.CreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = ser.CommentCreateSerializer
 
+    def get_permissions(self):
+        return set_permissions(self)
+
 
 class CommentDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = ser.CommentSerializer
+
+    def get_permissions(self):
+        return set_permissions(self)
 
 
 class SearchList(views.APIView):
@@ -272,6 +294,9 @@ class SearchList(views.APIView):
         serializer = ser.SearchSerializer(result, many=True)
         return response.Response(serializer.data)
 
+    def get_permissions(self):
+        return set_permissions(self)
+
 
 class UserCheckView(generics.GenericAPIView):
     queryset = User.objects.all()
@@ -284,6 +309,9 @@ class UserCheckView(generics.GenericAPIView):
         except:
             return response.Response(status=status.HTTP_202_ACCEPTED)
         return response.Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    def get_permissions(self):
+        return set_permissions(self)
 
 
 def user_login(request):
@@ -326,6 +354,9 @@ def user_register(request):
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = ser.MyTokenObtainPairSerializer
 
+    def get_permissions(self):
+        return set_permissions(self)
+
 
 class UserRegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -348,4 +379,7 @@ class UserRegisterView(generics.CreateAPIView):
             user_obj.save()
             self.set_profile(user_obj, region)
             return response.Response(user_serializer.data, status=status.HTTP_201_CREATED)
-        return response.Response(user_serializer.errors, status=status.HTTP_418_IM_A_TEAPOT)
+        return response.Response(user_serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE)
+
+    def get_permissions(self):
+        return set_permissions(self)
