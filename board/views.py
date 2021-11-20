@@ -182,7 +182,8 @@ class BoardSearchList(generics.ListAPIView):
             permission_classes = [permissions.IsAdminUser,]
         else:
             front = "https://jecheol42.herokuapp.com/"
-            if (origin == front):
+            local = "http://127.0.0.1:8080/"
+            if (origin == front) or (origin == local):
                 permission_classes = [permissions.AllowAny]
             else:
                 permission_classes = [permissions.IsAdminUser, ]
