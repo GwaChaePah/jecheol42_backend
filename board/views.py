@@ -1,14 +1,8 @@
-from random import choice
 from datetime import datetime
 
-import requests
 from django.db.models import Q
 from django.http import Http404
-from django.views.decorators.http import require_POST
-from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect, get_object_or_404
 
 from rest_framework import generics, views, response, status, permissions
 from rest_framework.parsers import MultiPartParser
@@ -18,123 +12,8 @@ from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 
 from .models import Post, Comment, Product, OpenApi, Profile
-from .forms import PostForm, CommentForm, LoginForm, RegisterForm
 
 from . import serializers as ser
-
-
-def main(request):
-    month = datetime.now().month
-    context = {
-        'products': Product.objects.filter(month__contains=[month]).order_by("?")[:4],
-        'form': LoginForm()
-    }
-    return render(request, 'main.html', context)
-
-
-@login_required
-def board(request):
-    context = {
-        'posts': Post.objects.all().order_by('-created_at'),
-    }
-    return render(request, 'board.html', context)
-
-
-def show(request, post_key):
-    post = get_object_or_404(Post, pk=post_key)
-    post.view_count += 1
-    post.save()
-    context = {
-        'post': post,
-        'comments': Comment.objects.filter(post_key=post).order_by('created_at'),
-        'comment_form': CommentForm()
-    }
-    return render(request, 'show.html', context)
-
-
-def search(request):
-    date = datetime.now().date()
-    search_text = '버섯'
-    context = {
-        # 'open_api_data': OpenApi.objects.all().order_by('id'),
-        'open_api_data': OpenApi.objects.filter(
-            Q(item_name__contains=search_text) | Q(kind_name__contains=search_text)).filter(rank='중품',
-                                                                                            date=date).order_by('id'),
-    }
-    return render(request, 'search.html', context)
-
-
-@login_required
-def new(request):
-    context = {
-        'form': PostForm()
-    }
-    return render(request, 'new.html', context)
-
-
-@require_POST
-def create(request):
-    form = PostForm(request.POST, request.FILES or None)
-    user = request.user
-    if form.is_valid():
-        post = form.save(commit=False)
-        post.user_key = user
-        post.save()
-    return redirect('board')
-
-
-def edit(request, post_key):
-    post = get_object_or_404(Post, pk=post_key)
-    context = {
-        'form': PostForm(instance=post),
-        'post': post
-    }
-    return render(request, 'edit.html', context)
-
-
-@require_POST
-def update(request, post_key):
-    post = get_object_or_404(Post, pk=post_key)
-    form = PostForm(request.POST, request.FILES or None, instance=post)
-    if form.is_valid():
-        form.save()
-    return redirect('show', post_key)
-
-
-@require_POST
-def delete(request, post_key):
-    post = get_object_or_404(Post, pk=post_key)
-    post.delete()
-    return redirect('board')
-
-
-@require_POST
-def comment_create(request, post_key):
-    post = get_object_or_404(Post, pk=post_key)
-    user = request.user
-    form = CommentForm(request.POST, request.FILES or None)
-    if form.is_valid():
-        comment = form.save(commit=False)
-        comment.post_key = post
-        comment.user_key = user
-        comment.save()
-    return redirect('show', post_key)
-
-
-@require_POST
-def comment_update(request, comment_key):
-    comment = get_object_or_404(Comment, pk=comment_key)
-    form = CommentForm(request.POST, request.FILES or None, instance=comment)
-    if form.is_valid():
-        form.save()
-    return redirect('show', comment.post_key.pk)
-
-
-@require_POST
-def comment_delete(request, comment_key):
-    comment = get_object_or_404(Comment, pk=comment_key)
-    comment.delete()
-    return redirect('show', comment.post_key.pk)
 
 
 def set_permissions(self):
@@ -312,43 +191,6 @@ class UserCheckView(generics.GenericAPIView):
 
     def get_permissions(self):
         return set_permissions(self)
-
-
-def user_login(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(request, username=username, password=password)
-    if user is not None:
-        login(request, user)
-        return redirect('board')
-    else:
-        return redirect('main')
-
-
-def user_logout(request):
-    logout(request)
-    return redirect('main')
-
-
-def register(request):
-    context = {
-        'form': RegisterForm()
-    }
-    return render(request, 'user_register.html', context)
-
-
-def user_register(request):
-    if request.method == 'POST':
-        form = RegisterForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            user.refresh_from_db()  # load the profile instance created by the signal
-            user.profile.region = form.cleaned_data.get('region')
-            user.save()
-            return redirect('main')
-    else:
-        form = RegisterForm()
-    return render(request, 'user_register.html', {'form': form})
 
 
 class MyTokenObtainPairView(TokenObtainPairView):

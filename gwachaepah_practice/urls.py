@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls import url
+from django.views.generic.base import RedirectView
 
 from board import views
 
@@ -32,8 +33,6 @@ schema_view = get_schema_view(
       default_version='v1',
       description="제철42 swagger",
       terms_of_service="https://jecheol-42.herokuapp.com/",
-      # contact=openapi.Contact(email="contact@snippets.local"),
-      # license=openapi.License(name="BSD License"),
    ),
    public=True,
    permission_classes=(permissions.AllowAny,),
@@ -48,18 +47,7 @@ urlpatterns = [
 
     # jecheol-42
     path('admin/', admin.site.urls),
-    path('', views.main, name="main"),
-    path('board/', views.board, name="board"),
-    path('show/<int:post_key>', views.show, name="show"),
-    path('search/', views.search, name="search"),
-    path('new/', views.new, name="new"),
-    path('create/', views.create, name="create"),
-    path('edit/<int:post_key>', views.edit, name="edit"),
-    path('update/<int:post_key>', views.update, name="update"),
-    path('delete/<int:post_key>', views.delete, name="delete"),
-    path('comment_create/<int:post_key>/', views.comment_create, name="comment_create"),
-    path('comment_update/<int:comment_key>/', views.comment_update, name="comment_update"),
-    path('comment_delete/<int:comment_key>/', views.comment_delete, name="comment_delete"),
+    path('', RedirectView.as_view(url='https://jecheol42.herokuapp.com/')),
 
     # api
     path('product/api/', views.ProductList.as_view()),
@@ -72,12 +60,6 @@ urlpatterns = [
     path('search/api', views.SearchList.as_view()),
 
     # user
-    # 나중에 지울 부분
-    path('user_login/', views.user_login, name="user_login"),
-    path('user_logout/', views.user_logout, name="user_logout"),
-    path('register/', views.register, name="register"),
-    path('user_register/', views.user_register, name="user_register"),
-    # 여기 위까지
     path('user/api/check/', views.UserCheckView.as_view()),
     path('user/api/register/', views.UserRegisterView.as_view()),
 
