@@ -14,6 +14,13 @@ class Profile(models.Model):
     region = models.PositiveIntegerField(default=0)
 
 
+class Region(models.Model):
+    state = models.CharField(max_length=32)     # 시/도
+    city = models.CharField(max_length=32)      # 시/군/구
+    address = models.CharField(max_length=32)   # 읍/면/동
+    code = models.PositiveIntegerField(default=0, null=False)
+
+
 class AutoDateTimeField(models.DateTimeField):
     def pre_save(self, model_instance, add):
         return timezone.now()

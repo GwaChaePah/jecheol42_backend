@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post, Comment, Product, OpenApi, Profile
+from .models import Post, Comment, Product, OpenApi, Profile, Region
 
 
 @admin.register(Post)
@@ -78,4 +78,18 @@ class ProfileAdmin(admin.ModelAdmin):
     )
     search_fields = (
         'region',
+    )
+
+
+@admin.register(Region)
+class RegionAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'state',
+        'city',
+        'address',
+        'code',
+    )
+    search_fields = (
+        'address',
     )
