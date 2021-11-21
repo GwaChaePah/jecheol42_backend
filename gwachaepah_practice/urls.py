@@ -62,6 +62,7 @@ urlpatterns = [
     # user
     path('user/api/check/', views.UserCheckView.as_view()),
     path('user/api/register/', views.UserRegisterView.as_view()),
+    path('user/api/region/', views.RegionList.as_view()),
 
     # jwt
     path('token/api/', views.MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
