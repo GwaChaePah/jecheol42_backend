@@ -82,6 +82,8 @@ class BoardSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     comment_cnt = serializers.SerializerMethodField()
     username = serializers.SerializerMethodField()
+    city = serializers.SerializerMethodField()
+    address = serializers.SerializerMethodField()
 
     def get_comment_cnt(self, obj):
         pk = obj.id
@@ -94,6 +96,16 @@ class PostSerializer(serializers.ModelSerializer):
         username = user.username
         return username
 
+    def get_city(self, obj):
+        region = obj.user_key.profile.region
+        city = Region.objects.get(code=region).city
+        return city
+
+    def get_address(self, obj):
+        region = obj.user_key.profile.region
+        address = Region.objects.get(code=region).address
+        return address
+
     class Meta:
         model = Post
         fields = '__all__'
@@ -104,6 +116,8 @@ class PostSerializer(serializers.ModelSerializer):
             'updated_at',
             'user_key',
             'username',
+            'city',
+            'address',
             'comment_cnt',
         ]
 
