@@ -58,6 +58,13 @@ class BoardSearchList(generics.ListAPIView):
         type=openapi.TYPE_INTEGER
     )
 
+    region_param = openapi.Parameter(
+        'region',
+        openapi.IN_QUERY,
+        description='지역 코드를 입력하세요',
+        type=openapi.TYPE_INTEGER
+    )
+
     def get_search(self, request):
         try:
             search_text = request.GET['search']
@@ -72,13 +79,24 @@ class BoardSearchList(generics.ListAPIView):
             return search_res.exclude(tag=2)
         return search_res.filter(tag=tag_type)
 
+    def get_region(self, request, tag_res):
+        try:
+            region = request.GET['region']
+        except:
+            return tag_res
+        city = int(region) / 100
+        min = city * 100
+        max = min + 100
+        return tag_res.filter(user_key__profile__region__gte=min, user_key__profile__region__lt=max)
+
     def get_permissions(self):
         return set_permissions(self)
 
-    @swagger_auto_schema(manual_parameters=[search_param, tag_param])
+    @swagger_auto_schema(manual_parameters=[search_param, tag_param, region_param])
     def get(self, request, *args, **kwargs):
         search_res = self.get_search(request)
-        result = self.get_tag(request, search_res)
+        tag_res = self.get_tag(request, search_res)
+        result = self.get_region(request, tag_res)
         page = self.paginate_queryset(result)
 
         if page is not None:
