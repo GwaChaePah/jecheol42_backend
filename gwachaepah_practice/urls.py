@@ -47,7 +47,7 @@ urlpatterns = [
 
     # jecheol-42
     path('admin/', admin.site.urls),
-    path('', RedirectView.as_view(url='https://jecheol42.herokuapp.com/')),
+    path('', RedirectView.as_view(url='/admin/', permanent=True)),
 
     # api
     path('product/api/', views.ProductList.as_view()),
