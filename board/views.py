@@ -85,7 +85,7 @@ class BoardSearchList(generics.ListAPIView):
         except:
             return tag_res
         city = int(region) / 100
-        min = city * 100
+        min = int(city) * 100
         max = min + 100
         return tag_res.filter(user_key__profile__region__gte=min, user_key__profile__region__lt=max)
 
