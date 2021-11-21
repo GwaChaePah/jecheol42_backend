@@ -11,7 +11,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 
-from .models import Post, Comment, Product, OpenApi, Profile
+from .models import Post, Comment, Product, OpenApi, Profile, Region
 
 from . import serializers as ser
 
@@ -225,3 +225,28 @@ class UserRegisterView(generics.CreateAPIView):
 
     def get_permissions(self):
         return set_permissions(self)
+
+
+class RegionList(generics.ListAPIView):
+    queryset = Region.objects.all()
+    serializer_class = ser.RegionSerializer
+
+    def get_permissions(self):
+        return set_permissions(self)
+
+    region_param = openapi.Parameter(
+        'search',
+        openapi.IN_QUERY,
+        description='여기에 해당 동을 입력하세요',
+        type=openapi.TYPE_STRING,
+    )
+
+    @swagger_auto_schema(manual_parameters=[region_param])
+    def get(self, request, *args, **kwargs):
+        try:
+            search_address = request.GET['search']
+        except:
+            return response.Response(status=status.HTTP_400_BAD_REQUEST)
+        search_res = Region.objects.filter(address__contains=search_address)
+        serializer = ser.RegionSerializer(search_res, many=True)
+        return response.Response(serializer.data)

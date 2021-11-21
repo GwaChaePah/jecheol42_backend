@@ -1,4 +1,4 @@
-from .models import Product, Post, Comment, OpenApi, Profile
+from .models import Product, Post, Comment, OpenApi, Profile, Region
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, PasswordField
 from django.contrib.auth.models import User
@@ -191,3 +191,9 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         data['username'] = self.user.username
         data['region'] = self.user.profile.region
         return data
+
+
+class RegionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Region
+        fields = '__all__'
