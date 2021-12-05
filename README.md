@@ -35,7 +35,7 @@ https://jecheol42.herokuapp.com/#/
 
 <hr>
 
-### 🎬 시연 영상
+### 시연 영상
 
 <a href="https://www.youtube.com/watch?v=hERhz800fU8"> 🍿 전체 영상보기</a>
 
