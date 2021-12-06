@@ -1,4 +1,4 @@
-![logo](logo.png)
+[![logo](logo.png)](https://jecheol42.herokuapp.com/#/)
 
 소가구를 대상으로 제철 수확물을 알리고, 지역 기반 나눔을 추구하는 온라인 커뮤니티 웹 사이트입니다.
 
