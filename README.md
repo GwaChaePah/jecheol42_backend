@@ -16,7 +16,8 @@ https://jecheol42.herokuapp.com/#/
 ### 데이터베이스
 
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white
-) &nbsp; **[Cloudinary]**
+) &nbsp;
+![Cloudinary](https://img.shields.io/badge/-Cloudinary-9cf?style=for-the-badge&logo=cloudinary) &nbsp;
 
 ### 배포 플랫폼
 
