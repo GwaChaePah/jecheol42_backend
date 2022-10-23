@@ -1,8 +1,9 @@
-[![logo](logo.png)](https://jecheol42.herokuapp.com/#/)
+## 소가구를 대상으로 제철 수확물을 알리고, 지역 기반 나눔을 추구하는 온라인 커뮤니티 웹 사이트, 제철42
 
-소가구를 대상으로 제철 수확물을 알리고, 지역 기반 나눔을 추구하는 온라인 커뮤니티 웹 사이트입니다.
+<p align="center">
+  <img src="https://j.gifs.com/z6xyxZ.gif" alt="animated" />
+</p>
 
-<hr>
 
 ### 개발 환경 및 언어
 
@@ -32,10 +33,9 @@
 ![Github](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)
 ![Notion](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white)
 
-<hr>
+### [Wiki](https://github.com/GwaChaePah/jecheol42_docs/wiki)
+### [시연 영상](https://www.youtube.com/watch?v=hERhz800fU8)
 
-### 시연 영상
-
-<a href="https://www.youtube.com/watch?v=hERhz800fU8"> 🍿 전체 영상보기</a>
-
-![ezgif-5-aa045a96f705](https://j.gifs.com/z6xyxZ.gif)
+<p align="center">
+  <img src="logo.png" alt="drawing" width="300"/>
+</p>
